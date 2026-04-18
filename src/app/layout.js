@@ -1,11 +1,8 @@
 import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
-import LoadingScreen from "@/app/components/layout/LoadingScreen";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/layout/Footer";
-import ScrollToTop from "@/app/components/layout/ScrollToTop";
-import FloatingQuoteButton from "@/app/components/layout/FloatingQuoteButton";
-import WhatsAppButton from "@/app/components/layout/WhatsAppButton";
+import ClientOverlays from "@/app/components/layout/ClientOverlays";
 
 // Manrope — display & headlines (editorial authority)
 const ManropeFont = Manrope({
@@ -45,8 +42,6 @@ export default function RootLayout({ children }) {
           Skip to main content
         </a>
 
-        <LoadingScreen />
-
         {/* Landmark: site-wide navigation */}
         <header>
           <Navbar />
@@ -65,9 +60,8 @@ export default function RootLayout({ children }) {
         {/* Landmark: site-wide footer */}
         <Footer />
 
-        <ScrollToTop />
-        <FloatingQuoteButton />
-        <WhatsAppButton />
+        {/* All floating/interactive overlays in one client boundary */}
+        <ClientOverlays />
       </body>
     </html>
   );

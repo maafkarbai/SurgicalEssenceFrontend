@@ -2,6 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import HomeContactForm from "@/app/components/HomeContactForm";
 
+export const metadata = {
+  title: "Surgical Essence | Precision Surgical Instruments Manufacturer",
+  description:
+    "ISO-certified surgical instruments manufacturer based in Sialkot, Pakistan. Supplying hospitals, distributors, and healthcare providers worldwide with precision surgical, dental, ophthalmic, and beauty care instruments.",
+};
+
 // ─── Data fetching ────────────────────────────────────────────────────────────
 
 async function getLatestPressReleases() {
@@ -38,7 +44,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ══ Hero ════════════════════════════════════════════════════════════ */}
-      <section className="max-w-screen-2xl mx-auto px-8 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="max-w-screen-2xl mx-auto px-8 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         {/* Left — copy */}
         <div className="space-y-8">
           {/* Badge */}
@@ -99,7 +105,7 @@ export default async function HomePage() {
             aria-hidden="true"
           />
           <div
-            className="relative rounded-xl overflow-hidden aspect-[4/3]"
+            className="relative rounded-xl overflow-hidden aspect-[16/9]"
             style={{ boxShadow: "0 16px 32px rgba(0,59,114,0.12)" }}
           >
             <Image
@@ -111,6 +117,48 @@ export default async function HomePage() {
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
+        </div>
+      </section>
+
+      {/* ══ Product Categories ══════════════════════════════════════════════ */}
+      <section className="max-w-screen-2xl mx-auto px-8 py-16">
+        <div className="mb-8">
+          <h2 className="font-headline text-3xl font-bold text-[#003b72]">Popular Categories</h2>
+          <div className="w-full h-px bg-slate-200 mt-3" aria-hidden="true" />
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { name: "Surgical",    href: "/products?cat=surgical",   image: "/images/catalog/SurgicalInstrumentsBanner.png"  },
+            { name: "Dental",      href: "/products?cat=dental",     image: "/images/catalog/DentalInstrumentsBanner.png"    },
+            { name: "Beauty Care", href: "/products?cat=beauty",     image: "/images/catalog/BeautyInstrumentsBanner.png"    },
+            { name: "Ophthalmic",  href: "/products?cat=ophthalmic", image: "/images/catalog/OpthalmicInstrumentsBanner.png" },
+          ].map(({ name, href, image }) => (
+            <Link
+              key={name}
+              href={href}
+              className="group rounded-xl overflow-hidden block border border-slate-200 hover:border-[#003b72] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+            >
+              {/* Image — cover fills edge to edge, aspect ratio matches landscape banners */}
+              <div className="relative aspect-[16/9]">
+                <Image
+                  src={image}
+                  alt={`${name} instruments`}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 50vw, 25vw"
+                />
+              </div>
+              {/* Label */}
+              <div className="px-4 py-3 flex items-center justify-between bg-white">
+                <h3 className="font-headline font-bold text-[#003b72] text-base">
+                  {name}
+                </h3>
+                <span className="text-sm font-bold text-[#006a63] group-hover:translate-x-0.5 transition-transform">
+                  Explore →
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -296,7 +344,7 @@ export default async function HomePage() {
               className="bg-white border-b-4 border-transparent hover:border-[#006a63] transition-all rounded-xl overflow-hidden group"
               style={{ boxShadow: "0 16px 32px rgba(0,59,114,0.06)" }}
             >
-              <div className="h-64 bg-slate-50 relative overflow-hidden">
+              <div className="relative aspect-[16/9] bg-slate-50 overflow-hidden">
                 <Image
                   src={image}
                   alt={title}
@@ -305,17 +353,17 @@ export default async function HomePage() {
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
-              <div className="p-8">
+              <div className="p-5">
                 <span className="text-xs font-bold text-[#006a63] uppercase tracking-wider">
                   {badge}
                 </span>
-                <h3 className="text-xl font-bold font-headline mt-2 text-[#191c1d]">
+                <h3 className="text-base font-bold font-headline mt-1.5 text-[#191c1d]">
                   {title}
                 </h3>
-                <p className="text-[#424751] text-sm mt-3 leading-relaxed">
+                <p className="text-[#424751] text-sm mt-2 leading-relaxed">
                   {desc}
                 </p>
-                <div className="mt-8 flex items-center justify-between">
+                <div className="mt-4 flex items-center justify-between">
                   <span className="text-[#003b72] font-bold text-sm">
                     Ref: {ref}
                   </span>
@@ -343,199 +391,6 @@ export default async function HomePage() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ══ Product Categories — Bento Grid ════════════════════════════════ */}
-      <section className="max-w-screen-2xl mx-auto px-8 py-20">
-        <div className="mb-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <h2 className="font-headline text-3xl font-bold text-[#003b72]">
-                Specialized Categories
-              </h2>
-              <p className="text-[#424751] mt-2">
-                Tailored solutions for every medical discipline.
-              </p>
-            </div>
-            <Link
-              href="/catalog"
-              className="text-[#003b72] font-bold flex items-center gap-2 group hover:text-[#00529b] transition-colors"
-            >
-              View Full Catalog
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="transition-transform group-hover:translate-x-1"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </div>
-          <div className="w-full h-px bg-slate-200 mt-4" aria-hidden="true" />
-        </div>
-
-        {/* Top row — 3 expanding cards */}
-        <div className="cat-flex-row">
-          {/* Ophthalmic */}
-          <Link
-            href="/products?cat=ophthalmic"
-            className="cat-card bg-white rounded-xl p-8 border border-slate-50 relative overflow-hidden group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
-            style={{ boxShadow: "0 16px 32px rgba(0,59,114,0.06)" }}
-          >
-            <div className="relative z-10 h-full flex flex-col justify-between">
-              <div>
-                <svg
-                  width="36"
-                  height="36"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#006a63"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                  className="mb-4"
-                >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                <h3 className="text-2xl font-bold font-headline mb-2 text-[#191c1d]">
-                  Ophthalmic
-                </h3>
-                <p className="text-[#424751] text-sm">
-                  Micro-precision tools for delicate ocular procedures and
-                  diagnostics.
-                </p>
-              </div>
-              <span className="mt-8 self-start text-xs font-bold uppercase tracking-widest text-[#003b72] border-b border-[#003b72]/20 pb-1">
-                Explore Range
-              </span>
-            </div>
-            <div className="absolute right-0 bottom-0 w-1/2 h-full opacity-10 group-hover:opacity-20 transition-opacity">
-              <Image
-                src="/images/catalog/OpthalmicInstrumentsBanner.png"
-                alt=""
-                fill
-                className="object-cover"
-                sizes="300px"
-                aria-hidden="true"
-              />
-            </div>
-          </Link>
-
-          {/* Dental */}
-          <Link
-            href="/products?cat=dental"
-            className="cat-card bg-[#f3f4f5] rounded-xl p-8 flex flex-col justify-between group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
-          >
-            <div>
-              <svg
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#003b72"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="mb-4"
-              >
-                <path d="M12 2C9 2 6 4 6 7c0 2 1 4 1 7 0 2 1 4 2 5s2 1 2 0c0-1 0-3 1-3s1 2 1 3 1 1 2 0 2-3 2-5c0-3 1-5 1-7 0-3-3-5-6-5z" />
-              </svg>
-              <h3 className="text-xl font-bold font-headline mb-2 text-[#191c1d]">
-                Dental
-              </h3>
-              <p className="text-[#424751] text-sm">
-                Comprehensive kit for restorative and surgical dentistry.
-              </p>
-            </div>
-            <span className="mt-6 self-start text-xs font-bold uppercase tracking-widest text-[#003b72]">
-              View Products
-            </span>
-          </Link>
-
-          {/* General Surgical */}
-          <Link
-            href="/products?cat=surgical"
-            className="cat-card bg-[#f3f4f5] rounded-xl p-8 flex flex-col justify-between group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
-          >
-            <div>
-              <svg
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#003b72"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-                className="mb-4"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
-              <h3 className="text-xl font-bold font-headline mb-2 text-[#191c1d]">
-                General
-              </h3>
-              <p className="text-[#424751] text-sm">
-                Essential instruments for standard clinical operations.
-              </p>
-            </div>
-            <span className="mt-6 self-start text-xs font-bold uppercase tracking-widest text-[#003b72]">
-              View Products
-            </span>
-          </Link>
-        </div>
-
-        {/* Beauty — full-width card below */}
-        <div className="mt-6 bg-[#003b72] text-white rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <div className="bg-white/10 p-4 rounded-lg shrink-0">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="6" cy="6" r="3" />
-                <circle cx="6" cy="18" r="3" />
-                <line x1="20" y1="4" x2="8.12" y2="15.88" />
-                <line x1="14.47" y1="14.48" x2="20" y2="20" />
-                <line x1="8.12" y1="8.12" x2="12" y2="12" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold font-headline">
-                Beauty &amp; Aesthetic Instruments
-              </h3>
-              <p className="text-[#a5c7ff] text-sm mt-1">
-                Surgical grade precision for dermatology and aesthetic clinics.
-              </p>
-            </div>
-          </div>
-          <Link
-            href="/products?cat=beauty"
-            className="bg-white text-[#003b72] px-8 py-3 font-bold rounded whitespace-nowrap hover:bg-slate-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            Browse Beauty Line
-          </Link>
         </div>
       </section>
 

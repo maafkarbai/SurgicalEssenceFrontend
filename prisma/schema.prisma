@@ -50,3 +50,52 @@ model User {
 
   @@index([email])
 }
+
+model BuyerUser {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  passwordHash String
+  name         String?
+  company      String?
+  country      String?
+  phone        String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  quotes       QuoteRequest[]
+
+  @@index([email])
+}
+
+model QuoteRequest {
+  id           String      @id @default(cuid())
+  status       String      @default("NEW")
+  name         String
+  email        String
+  phone        String?
+  organization String?
+  country      String?
+  message      String?     @db.Text
+  buyerUserId  String?
+  buyerUser    BuyerUser?  @relation(fields: [buyerUserId], references: [id])
+  items        QuoteItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([buyerUserId])
+  @@index([createdAt(sort: Desc)])
+}
+
+model QuoteItem {
+  id             String       @id @default(cuid())
+  productId      String
+  productName    String
+  productSku     String?
+  quantity       Int          @default(1)
+  notes          String?
+  quoteRequestId String
+  quoteRequest   QuoteRequest @relation(fields: [quoteRequestId], references: [id], onDelete: Cascade)
+
+  @@index([quoteRequestId])
+}
