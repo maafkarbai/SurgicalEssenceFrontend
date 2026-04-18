@@ -1,0 +1,565 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import SearchModal from "@/app/components/SearchModal";
+
+const CATEGORIES = [
+  {
+    href: "/products?cat=surgical",
+    label: "Surgical",
+    desc: "Scissors, forceps, clamps, retractors & more",
+    image: "/images/products/scalpel-1.jpg",
+  },
+  {
+    href: "/products?cat=dental",
+    label: "Dental",
+    desc: "Scalers, forceps, mirrors & more",
+    image: "/images/products/probe-1.jpg",
+  },
+  {
+    href: "/products?cat=beauty",
+    label: "Beauty Care",
+    desc: "Scissors, nippers, tweezers & more",
+    image: "/images/products/forceps-9.jpg",
+  },
+  {
+    href: "/products?cat=ophthalmic",
+    label: "Ophthalmic",
+    desc: "Iris scissors, specula, forceps & more",
+    image: "/images/products/forceps-1.jpg",
+  },
+];
+
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/quality-control", label: "Quality Control" },
+  { href: "/certifications", label: "Certifications" },
+  { href: "/distributor", label: "Distributors" },
+  { href: "/products", label: "Products", hasDropdown: true },
+  { href: "/press-releases", label: "News" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+
+// ─── Icons ────────────────────────────────────────────────────────────────────
+
+const CatalogIcon = () => (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="12" y1="18" x2="12" y2="12" />
+    <line x1="9" y1="15" x2="15" y2="15" />
+  </svg>
+);
+
+const PhoneIcon = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.73a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16l.19.92z" />
+  </svg>
+);
+
+const SearchIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+  </svg>
+);
+
+const WhatsAppIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
+  </svg>
+);
+
+const ChevronDown = ({ open }) => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+  >
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
+// ─── Products dropdown ────────────────────────────────────────────────────────
+
+function ProductsDropdown({ onClose }) {
+  return (
+    <div
+      id="products-dropdown"
+      role="region"
+      aria-label="Product categories"
+      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 bg-surface-lowest rounded-md overflow-hidden animate-slide-down z-50 shadow-ambient"
+    >
+      <Link
+        href="/products"
+        onClick={onClose}
+        aria-label="View all surgical instruments"
+        className="flex items-center justify-between px-4 py-2.5 bg-brand-primary text-white font-semibold text-sm hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
+      >
+        <span>All Instruments</span>
+        <span className="text-white/70 text-xs">View all →</span>
+      </Link>
+      <ul role="list" className="py-1.5">
+        {CATEGORIES.map(({ href, label, desc, image }) => (
+          <li key={href}>
+            <Link
+              href={href}
+              onClick={onClose}
+              className="flex items-center gap-3 px-3 py-2 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors group"
+            >
+              {/* Instrument thumbnail */}
+              <div className="relative shrink-0 w-10 h-14 rounded-lg bg-surface-low overflow-hidden">
+                <Image
+                  src={image}
+                  alt={label}
+                  fill
+                  className="object-contain p-1.5"
+                  sizes="40px"
+                />
+              </div>
+              {/* Text */}
+              <div className="min-w-0">
+                <span className="block font-semibold text-sm text-gray-900 group-hover:text-brand-primary transition-colors">
+                  {label}
+                </span>
+                <span className="block text-xs text-gray-500 truncate">
+                  {desc}
+                </span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// ─── Navbar ───────────────────────────────────────────────────────────────────
+
+const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const pathname = usePathname();
+  const dropdownRef = useRef(null);
+
+  const isActive = (href) => {
+    if (href === "/") return pathname === "/";
+    return (
+      pathname === href ||
+      pathname.startsWith(href + "/") ||
+      pathname.startsWith(href + "?")
+    );
+  };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setSearchOpen(false);
+        setDropdownOpen(false);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+      if (
+        e.key === "/" &&
+        e.target.tagName !== "INPUT" &&
+        e.target.tagName !== "TEXTAREA" &&
+        e.target.tagName !== "SELECT"
+      ) {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    const onClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
+        setDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  return (
+    <header className="w-full bg-surface-lowest fixed top-0 left-0 right-0 z-40 shadow-ambient-sm">
+      {/* ══ Row 1: Utility bar ══════════════════════════════════════════════ */}
+      <div className="hidden md:block bg-brand-primary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-11 flex items-center justify-between">
+          {/* Left — phone */}
+          <a
+            href="tel:+923036029756"
+            aria-label="Call us at +92 303 602 9756"
+            className="flex items-center gap-1.5 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
+          >
+            <PhoneIcon />
+            +92 303 602 9756
+          </a>
+
+          {/* Right — WhatsApp + Email */}
+          <div className="flex items-center gap-4">
+            <a
+              href="https://wa.me/923036029756"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Chat with us on WhatsApp"
+              className="flex items-center gap-1.5 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
+            >
+              <WhatsAppIcon />
+              WhatsApp
+            </a>
+            <span className="text-white/30" aria-hidden="true">
+              |
+            </span>
+            <a
+              href="mailto:info@surgicalessence.com"
+              aria-label="Email info@surgicalessence.com"
+              className="flex items-center gap-1.5 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
+            >
+              <MailIcon />
+              info@surgicalessence.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* ══ Row 2: Logo + Search + CTAs ════════════════════════════════════ */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-4 h-24">
+        {/* Logo */}
+        <Link
+          href="/"
+          aria-label="Go to homepage"
+          className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded"
+        >
+          <Image
+            src="/images/logo/SurgicalEssenceLogo.png"
+            alt="Surgical Essence"
+            width={220}
+            height={88}
+            priority
+          />
+        </Link>
+
+        {/* Search — grows to fill available space */}
+        <button
+          type="button"
+          onClick={() => setSearchOpen((v) => !v)}
+          aria-label="Search products"
+          aria-expanded={searchOpen}
+          aria-haspopup="dialog"
+          className="hidden md:flex items-center gap-2 px-3 h-11 flex-1 max-w-xl rounded border border-border text-text-muted bg-surface-low hover:border-brand-primary hover:text-brand-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
+        >
+          <SearchIcon />
+          <span className="text-sm">Search products…</span>
+        </button>
+
+        {/* Desktop CTAs */}
+        <div className="hidden md:flex items-center gap-2 shrink-0">
+          <Link href="/catalog" className="btn-outline py-2 px-4 text-sm">
+            <CatalogIcon />
+            View Catalog
+          </Link>
+          <Link href="/contact" className="btn-primary py-2 px-4 text-sm">
+            Get a Quote
+          </Link>
+        </div>
+
+        {/* Mobile: search + hamburger */}
+        <div className="md:hidden flex items-center gap-2 ml-auto">
+          <button
+            type="button"
+            onClick={() => setSearchOpen((v) => !v)}
+            aria-label="Search products"
+            className="flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+          >
+            <SearchIcon />
+          </button>
+          <button
+            type="button"
+            className="flex items-center justify-center w-9 h-9 rounded text-gray-700 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
+            aria-label={
+              menuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? (
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* ══ Row 3: Nav links (desktop only) ════════════════════════════════ */}
+      <nav
+        className="hidden md:block bg-surface-low drop-shadow-sm"
+        aria-label="Main navigation"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-14">
+          <ul className="flex items-center gap-0.5 flex-1" role="list">
+            {NAV_LINKS.map(({ href, label, hasDropdown }) => (
+              <li
+                key={href}
+                className="relative"
+                ref={hasDropdown ? dropdownRef : undefined}
+                onBlur={
+                  hasDropdown
+                    ? (e) => {
+                        if (!dropdownRef.current?.contains(e.relatedTarget))
+                          setDropdownOpen(false);
+                      }
+                    : undefined
+                }
+              >
+                {hasDropdown ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setDropdownOpen((v) => !v)}
+                      onMouseEnter={() => setDropdownOpen(true)}
+                      aria-haspopup="true"
+                      aria-expanded={dropdownOpen}
+                      aria-controls="products-dropdown"
+                      aria-current={isActive(href) ? "page" : undefined}
+                      className={`inline-flex items-center gap-1 px-3 py-1.5 text-sm font-semibold hover:text-brand-primary hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors
+                        ${isActive(href) ? "text-brand-primary border-b-2 border-brand-primary" : "text-black"}`}
+                    >
+                      {label}
+                      <ChevronDown open={dropdownOpen} />
+                    </button>
+                    {dropdownOpen && (
+                      <div onMouseLeave={() => setDropdownOpen(false)}>
+                        <ProductsDropdown
+                          onClose={() => setDropdownOpen(false)}
+                        />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={href}
+                    aria-current={isActive(href) ? "page" : undefined}
+                    className={`inline-block px-3 py-1.5 text-sm font-semibold hover:text-brand-primary hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors
+                      ${isActive(href) ? "text-brand-primary border-b-2 border-brand-primary" : "text-black"}`}
+                  >
+                    {label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      {/* ── Search modal ── */}
+      {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
+
+      {/* ══ Mobile menu ════════════════════════════════════════════════════ */}
+      {menuOpen && (
+        <div id="mobile-menu" className="md:hidden bg-surface-lowest px-4 pb-5">
+          {/* Nav links */}
+          <ul className="flex flex-col gap-0.5 mt-3" role="list">
+            {NAV_LINKS.map(({ href, label, hasDropdown }) => (
+              <li key={href}>
+                {hasDropdown ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setMobileProductsOpen((v) => !v)}
+                      aria-expanded={mobileProductsOpen}
+                      aria-current={isActive(href) ? "page" : undefined}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded text-sm font-semibold hover:text-brand-primary hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors
+                        ${isActive(href) ? "text-brand-primary bg-slate-100" : "text-black"}`}
+                    >
+                      {label}
+                      <ChevronDown open={mobileProductsOpen} />
+                    </button>
+                    {mobileProductsOpen && (
+                      <ul
+                        className="mt-0.5 ml-4 flex flex-col pl-4"
+                        role="list"
+                      >
+                        <li>
+                          <Link
+                            href="/products"
+                            onClick={() => setMenuOpen(false)}
+                            className="block py-1.5 text-sm font-semibold text-brand-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                          >
+                            All Instruments →
+                          </Link>
+                        </li>
+                        {CATEGORIES.map(({ href, label }) => (
+                          <li key={href}>
+                            <Link
+                              href={href}
+                              onClick={() => setMenuOpen(false)}
+                              className="block py-1.5 text-sm text-gray-600 hover:text-brand-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
+                            >
+                              {label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    href={href}
+                    aria-current={isActive(href) ? "page" : undefined}
+                    className={`block px-3 py-2 rounded text-sm font-semibold hover:text-brand-primary hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors
+                      ${isActive(href) ? "text-brand-primary bg-slate-100" : "text-black"}`}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* Contact actions */}
+          <div className="mt-4 flex flex-col gap-2">
+            <div className="flex gap-2">
+              <a
+                href="tel:+923036029756"
+                aria-label="Call us at +92 303 602 9756"
+                className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded bg-surface-low text-text-body text-sm font-medium hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <PhoneIcon />
+                Call Us
+              </a>
+              <a
+                href="https://wa.me/923036029756"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Chat on WhatsApp"
+                className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded bg-surface-low text-text-body text-sm font-medium hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <WhatsAppIcon />
+                WhatsApp
+              </a>
+            </div>
+            <Link
+              href="/catalog"
+              className="btn-outline py-2 px-4 text-sm w-full justify-center"
+              onClick={() => setMenuOpen(false)}
+            >
+              <CatalogIcon />
+              View Catalog
+            </Link>
+            <Link
+              href="/contact"
+              className="btn-primary py-2 px-4 text-sm w-full justify-center"
+              onClick={() => setMenuOpen(false)}
+            >
+              Get a Quote
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Navbar;

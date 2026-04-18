@@ -1,0 +1,74 @@
+import Skeleton from "@/app/components/ui/Skeleton";
+
+export default function ContactLoading() {
+  return (
+    <div aria-busy="true" aria-label="Loading contact page">
+
+      {/* Header */}
+      <div
+        className="py-14 px-4 sm:px-8"
+        style={{ background: "linear-gradient(135deg, #003b72, #00529B)", minHeight: 200 }}
+      >
+        <div className="max-w-3xl mx-auto flex flex-col items-center gap-3 text-center">
+          <Skeleton className="h-2.5 w-28 rounded-full opacity-40" />
+          <Skeleton className="h-12 w-64 rounded-md opacity-30" />
+          <Skeleton className="h-4 w-80 rounded-full opacity-20" />
+        </div>
+      </div>
+
+      {/* Form + sidebar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
+        <div className="grid lg:grid-cols-3 gap-10">
+
+          {/* Form */}
+          <div className="lg:col-span-2 bg-surface-lowest rounded-lg p-8 shadow-ambient-sm flex flex-col gap-5">
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex flex-col gap-2">
+                  <Skeleton className="h-3 w-20 rounded-full" />
+                  <Skeleton className="h-11 w-full rounded-xl" />
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-3 w-16 rounded-full" />
+              <Skeleton className="h-11 w-full rounded-xl" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-3 w-24 rounded-full" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+            </div>
+            <Skeleton className="h-12 w-full rounded-full" />
+          </div>
+
+          {/* Sidebar */}
+          <div className="flex flex-col gap-5">
+            <div className="bg-surface-lowest rounded-lg p-6 shadow-ambient-sm flex flex-col gap-4">
+              <Skeleton className="h-5 w-32 rounded-xl" />
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <Skeleton className="w-9 h-9 rounded-full" />
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    <Skeleton className="h-3 w-20 rounded-full" />
+                    <Skeleton className="h-3 w-32 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="bg-brand-secondary rounded-lg p-6 flex flex-col gap-3">
+              <Skeleton className="h-4 w-28 rounded-xl" />
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <Skeleton className="w-5 h-5 rounded-full mt-0.5 shrink-0" />
+                  <Skeleton className="h-3 flex-1 rounded-full" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  );
+}

@@ -1,0 +1,602 @@
+@import "tailwindcss";
+
+/* Hide scrollbar on carousel track while keeping scroll functionality */
+.catalog-scroll-track {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.catalog-scroll-track::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes slow-ping {
+  0% { transform: scale(1); opacity: 0.4; }
+  70%, 100% { transform: scale(1.18); opacity: 0; }
+}
+
+@keyframes loading-bar {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ── Staggered entrance delays ── */
+@keyframes fade-in-up-soft {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@theme {
+  --animate-shimmer:        shimmer 1.6s linear infinite;
+  --animate-fade-in-soft:   fade-in-up-soft 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-slide-in-right: slide-in-right  0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-scale-in:       scale-in        0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-loading-bar: loading-bar 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  --animate-fade-in-up:  fade-in-up 0.5s ease-out forwards;
+  --animate-slow-ping:   slow-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-slide-down:  slide-down 0.2s ease-out forwards;
+
+  /* ════════════════════════════════════════════════════════════════════════
+     SURGICAL ESSENCE — "CLINICAL PRECISION & EDITORIAL EXCELLENCE"
+     North star: The Clinical Curator — precision of surgical instruments
+     paired with the sophisticated layout of a premium scientific journal.
+     Asymmetric sectioning · tonal layering · Manrope + Inter typography.
+     Primary Trust Blue #00529B · Secondary Sterile Teal #006a63
+     ════════════════════════════════════════════════════════════════════════ */
+
+  /* ── Core brand scale ──────────────────────────────────────────────────── */
+  --color-brand-primary:        #00529B;   /* Trust Blue — P-40 — CTAs, brand moments      */
+  --color-brand-light:          #006EC6;   /* Primary container light — hover, accents      */
+  --color-brand-dark:           #003b72;   /* Primary dark — P-20 — pressed, gradient start */
+  --color-brand-secondary:      #D1E4FF;   /* Primary fixed — icon bg, soft fills           */
+  --color-brand-surface:        #F5F8FC;   /* Clinical cool-tinted grey-white               */
+
+  /* ── Secondary: Sterile Teal (surgical environment) ────────────────────── */
+  --color-teal:                 #006a63;   /* Secondary — success, focus, precision CTAs    */
+  --color-teal-light:           #00897F;   /* Teal hover                                    */
+  --color-teal-container:       #9CF2E6;   /* Secondary container — light teal bg           */
+  --color-teal-on-container:    #00201D;   /* Text on teal container                        */
+
+  /* ── Tertiary: Warm Brown (from MD3 palette — screenshot confirms #883B00) */
+  --color-tertiary:             #883B00;   /* Warm accent — badges, special labels          */
+  --color-tertiary-container:   #FFDBC9;   /* Light warm bg                                 */
+
+  /* ── Surface / background tiers (tonal layering — no 1px dividers) ────── */
+  --color-bg-page:              #F8F9FA;   /* default page background (MD3 neutral)         */
+  --color-bg-surface:           #F8F9FA;   /* subtle off-white sections                     */
+  --color-bg-section:           #EEF2F8;   /* surface_container_low — alternate sections    */
+  --color-surface-lowest:       #ffffff;   /* floating hero cards / modals                  */
+  --color-surface-low:          #EEF2F8;   /* surface_container_low                         */
+  --color-surface-high:         #DDE3ED;   /* surface_container_high                        */
+  --color-bg-dark:              #00529B;   /* primary blue — hero / CTA sections            */
+  --color-bg-darker:            #003b72;   /* deeper blue — overlays                        */
+  --color-bg-darkest:           #0a1628;   /* footer — deep neutral-navy                    */
+
+  /* ── Text (never pure black; always from on_surface family) ───────────── */
+  --color-text-heading:         #191c1d;   /* on_surface — headings (near-black warm)       */
+  --color-text-body:            #3d4354;   /* on_surface_variant — body copy                */
+  --color-text-muted:           #5f6578;   /* secondary / helper text                       */
+  --color-text-subtle:          #909aab;   /* placeholders, timestamps                      */
+
+  /* ── Buttons ───────────────────────────────────────────────────────────── */
+  --color-btn-primary-bg:       #00529B;
+  --color-btn-primary-hover:    #003b72;
+  --color-btn-primary-text:     #ffffff;
+  --color-btn-secondary-bg:     #D1E4FF;
+  --color-btn-secondary-hover:  #BFCFEF;
+  --color-btn-secondary-text:   #003b72;
+  --color-btn-outline-border:   #00529B;
+  --color-btn-outline-text:     #00529B;
+  --color-btn-outline-hover-bg: #00529B;
+  --color-btn-ghost-text:       #00529B;
+  --color-btn-ghost-hover-bg:   #D1E4FF;
+
+  /* ── Borders — ghost-border rule (felt, not seen) ─────────────────────── */
+  /* Strict: no 1px solid section dividers; use surface tiers instead.       */
+  /* Ghost border: outline_variant at 15% opacity when boundary is needed.   */
+  --color-border:               #b8c4d4;   /* outline_variant                               */
+  --color-border-subtle:        rgba(184, 196, 212, 0.15); /* ghost border — felt not seen  */
+  --color-border-strong:        #00529B;   /* focus rings                                   */
+
+  /* ── Aliases for Tailwind gray/slate ───────────────────────────────────── */
+  --color-gray-50:              #F8F9FA;
+  --color-gray-100:             #EEF2F8;
+  --color-gray-200:             #DDE3ED;
+  --color-slate-50:             #EEF2F8;
+  --color-slate-100:            #DDE3ED;
+  --color-slate-200:            #b8c4d4;
+
+  /* ── Legacy aliases ────────────────────────────────────────────────────── */
+  --color-footer-bg:            #0a1628;
+
+  /* ══ MD3 design-token palette (migrated from old Tailwind v3 config) ═════
+     These expose the full Material Design 3 role set as Tailwind utilities:
+     bg-primary, text-on-surface, bg-surface-container-low, etc.
+     ════════════════════════════════════════════════════════════════════════ */
+
+  /* ── Primary ─────────────────────────────────────────────────────────── */
+  --color-primary:                  #003b72;   /* P-20 — deep trust blue              */
+  --color-primary-container:        #00529b;   /* P-40 — CTA blue                     */
+  --color-primary-fixed:            #d5e3ff;   /* P-90 — soft primary tint            */
+  --color-primary-fixed-dim:        #a6c8ff;   /* P-80 — dim primary fixed            */
+  --color-on-primary:               #ffffff;
+  --color-on-primary-container:     #a5c7ff;
+  --color-on-primary-fixed:         #001c3b;
+  --color-on-primary-fixed-variant: #004787;
+  --color-inverse-primary:          #a6c8ff;
+  --color-surface-tint:             #1d5fa8;
+
+  /* ── Secondary (Sterile Teal) ────────────────────────────────────────── */
+  --color-secondary:                #006a63;
+  --color-secondary-container:      #77f4e8;
+  --color-secondary-fixed:          #7af6eb;
+  --color-secondary-fixed-dim:      #5bdacf;
+  --color-on-secondary:             #ffffff;
+  --color-on-secondary-container:   #006f68;
+  --color-on-secondary-fixed:       #00201d;
+  --color-on-secondary-fixed-variant: #00504b;
+
+  /* ── Tertiary (Warm Brown) ───────────────────────────────────────────── */
+  --color-tertiary:                 #642a00;
+  --color-tertiary-container:       #883b00;
+  --color-tertiary-fixed:           #ffdbca;
+  --color-tertiary-fixed-dim:       #ffb68e;
+  --color-on-tertiary:              #ffffff;
+  --color-on-tertiary-container:    #ffb48b;
+  --color-on-tertiary-fixed:        #331200;
+  --color-on-tertiary-fixed-variant: #773300;
+
+  /* ── Error ───────────────────────────────────────────────────────────── */
+  --color-error:                    #ba1a1a;
+  --color-error-container:          #ffdad6;
+  --color-on-error:                 #ffffff;
+  --color-on-error-container:       #93000a;
+
+  /* ── Background / Surface ────────────────────────────────────────────── */
+  --color-background:               #f8f9fa;
+  --color-on-background:            #191c1d;
+  --color-surface:                  #f8f9fa;
+  --color-surface-dim:              #d9dadb;
+  --color-surface-bright:           #f8f9fa;
+  --color-surface-variant:          #e1e3e4;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low:    #f3f4f5;
+  --color-surface-container:        #edeeef;
+  --color-surface-container-high:   #e7e8e9;
+  --color-surface-container-highest: #e1e3e4;
+  --color-on-surface:               #191c1d;
+  --color-on-surface-variant:       #424751;
+  --color-inverse-surface:          #2e3132;
+  --color-inverse-on-surface:       #f0f1f2;
+
+  /* ── Outline ─────────────────────────────────────────────────────────── */
+  --color-outline:                  #727782;
+  --color-outline-variant:          #c2c6d3;
+
+  /* ── Typography scale
+     Display  (Manrope) 3.5rem  / tracking -0.02em  — hero headlines
+     Headline (Manrope) 1.75rem                      — section openers
+     Title    (Manrope) 1.125rem / semi-bold         — card titles, sub-nav
+     Body     (Inter)   1rem    / 16px               — B2B accessibility minimum
+     Label    (Inter)   0.75rem / ALL CAPS +0.05em   — eyebrow, metadata, specs
+     ──────────────────────────────────────────────────────────────────────── */
+  --text-display:   3.5rem;
+  --text-headline:  1.75rem;
+  --text-title:     1.125rem;
+  --text-body:      1rem;
+  --text-label:     0.75rem;
+
+  --tracking-display: -0.02em;
+  --tracking-label:    0.05em;
+
+  /* ── Elevation — Medical Glow (tinted, never pure black) ───────────────── */
+  /* Tint: rgba(0, 59, 114, ...) — deep navy from primary dark                */
+  --shadow-ambient-sm: 0 8px 32px rgba(0, 59, 114, 0.06);
+  --shadow-ambient:    0 16px 48px rgba(0, 59, 114, 0.08), 0 4px 16px rgba(0, 59, 114, 0.04);
+  --shadow-ambient-lg: 0 24px 80px rgba(0, 59, 114, 0.10), 0 8px 24px rgba(0, 59, 114, 0.06);
+
+  /* ── Glassmorphism ──────────────────────────────────────────────────────── */
+  --glass-bg:     rgba(255, 255, 255, 0.80);
+  --glass-blur:   blur(16px);
+
+  /* ── Font stack — Manrope for display/headlines, Inter for body/UI ─────── */
+  --font-sans:     var(--font-inter),   ui-sans-serif, system-ui, sans-serif;
+  --font-display:  var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Font family shortcuts (matches old config: font-headline, font-body) ─ */
+  --font-headline: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-body:     var(--font-inter),   ui-sans-serif, system-ui, sans-serif;
+  --font-label:    var(--font-inter),   ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Border radius (matches old config scale) ────────────────────────── */
+  --radius:      0.125rem;   /* rounded        */
+  --radius-lg:   0.25rem;    /* rounded-lg     */
+  --radius-xl:   0.5rem;     /* rounded-xl     */
+  --radius-full: 0.75rem;    /* rounded-full   */
+}
+
+/* ── Base background ─────────────────────────────────────────────────────── */
+body {
+  background-color: #f8f9fa;
+}
+
+/* ── Expanding category cards ─────────────────────────────────────────────── */
+.cat-flex-row {
+  display: flex;
+  gap: 1.5rem;
+}
+.cat-flex-row .cat-card {
+  flex: 1;
+  min-width: 0;
+  transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cat-flex-row:has(.cat-card:hover) .cat-card {
+  flex: 0.55;
+}
+.cat-flex-row .cat-card:hover {
+  flex: 2.5 !important;
+}
+@media (max-width: 767px) {
+  .cat-flex-row { flex-direction: column; }
+}
+
+/* ── Global typography: Manrope for headings, Inter for body ───────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* ── Global button utility classes — "Clinical Precision & Editorial Excellence"
+   Buttons: DEFAULT 4px radius (precision — no pill shape, no consumer-playful rounding).
+   Primary: solid Trust Blue. Gradient reserved for Hero sections only.
+   Hover transition: crisp 200ms cubic-bezier(0.4, 0, 0.2, 1).
+   ─────────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* Primary — solid Trust Blue, surgical precision radius */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow       200ms cubic-bezier(0.4, 0, 0.2, 1),
+                transform        150ms cubic-bezier(0.4, 0, 0.2, 1);
+    outline-offset: 2px;
+    box-shadow: var(--shadow-ambient-sm);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-btn-primary-hover);
+    box-shadow: var(--shadow-ambient);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active  { transform: translateY(0); box-shadow: var(--shadow-ambient-sm); }
+  .btn-primary:focus-visible { outline: 2px solid var(--color-brand-primary); }
+
+  /* Secondary — primary_fixed soft fill, authoritative dark text */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.25rem;
+    background-color: var(--color-btn-secondary-bg);
+    color: var(--color-btn-secondary-text);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow       200ms cubic-bezier(0.4, 0, 0.2, 1);
+    outline-offset: 2px;
+  }
+  .btn-secondary:hover {
+    background-color: var(--color-btn-secondary-hover);
+    box-shadow: var(--shadow-ambient-sm);
+  }
+  .btn-secondary:focus-visible { outline: 2px solid var(--color-btn-outline-border); }
+
+  /* Outline — ghost-border rule: felt, not seen */
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.25rem;
+    border: 1.5px solid rgba(184, 196, 212, 0.60);
+    background-color: transparent;
+    color: var(--color-btn-outline-text);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                border-color     200ms cubic-bezier(0.4, 0, 0.2, 1),
+                color            200ms cubic-bezier(0.4, 0, 0.2, 1);
+    outline-offset: 2px;
+  }
+  .btn-outline:hover {
+    background-color: var(--color-btn-primary-bg);
+    border-color: transparent;
+    color: #ffffff;
+  }
+  .btn-outline:focus-visible { outline: 2px solid var(--color-btn-outline-border); }
+
+  /* Ghost — text only, primary_fixed hover bg */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.25rem;
+    background-color: transparent;
+    color: var(--color-btn-ghost-text);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    outline-offset: 2px;
+  }
+  .btn-ghost:hover  { background-color: var(--color-btn-ghost-hover-bg); }
+  .btn-ghost:focus-visible { outline: 2px solid var(--color-btn-outline-border); }
+
+  /* ── Staggered entrance animation helpers ───────────────────────────────── */
+  .animate-fade-soft          { animation: var(--animate-fade-in-soft); }
+  .animate-slide-right        { animation: var(--animate-slide-in-right); }
+  .animate-scale-in           { animation: var(--animate-scale-in); }
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+  .delay-600 { animation-delay: 600ms; }
+  .delay-700 { animation-delay: 700ms; }
+
+  /* ── Dot-grid texture — hero background overlay ─────────────────────────── */
+  .dot-grid {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* ── Cross-hatch texture — subtle light section treatment ───────────────── */
+  .cross-hatch {
+    background-image:
+      repeating-linear-gradient(0deg,   transparent, transparent 24px, rgba(0,82,155,0.03) 24px, rgba(0,82,155,0.03) 25px),
+      repeating-linear-gradient(90deg,  transparent, transparent 24px, rgba(0,82,155,0.03) 24px, rgba(0,82,155,0.03) 25px);
+  }
+
+  /* ── Utility: skeleton shimmer ─────────────────────────────────────────── */
+  .skeleton {
+    border-radius: 0.25rem;
+    background: linear-gradient(
+      90deg,
+      #DDE3ED 0px,
+      #EEF2F8 80px,
+      #DDE3ED 160px
+    );
+    background-size: 400px 100%;
+    animation: var(--animate-shimmer);
+  }
+
+  /* ── Utility: ambient shadow (Medical Glow — tinted navy, never pure-black) */
+  .shadow-ambient-sm { box-shadow: var(--shadow-ambient-sm); }
+  .shadow-ambient    { box-shadow: var(--shadow-ambient);    }
+  .shadow-ambient-lg { box-shadow: var(--shadow-ambient-lg); }
+
+  /* ── Utility: glassmorphism overlay ─────────────────────────────────────── */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+  }
+
+  /* ── Utility: eyebrow / label text (Inter — precision spec label) ────────── */
+  .text-eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-label);
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-brand-primary);
+  }
+
+  /* ── Utility: display headline (Manrope — editorial authority) ───────────── */
+  .text-display {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-display);
+    color: var(--color-text-heading);
+  }
+
+  /* ── Utility: teal accent — secondary sterile teal, for badges & success ── */
+  .badge-teal {
+    background-color: var(--color-teal-container);
+    color: var(--color-teal);
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.25rem;
+  }
+
+  /* ── Precision input — 2px radius, teal bottom-border focus ─────────────── */
+  .input-precision {
+    border-radius: 0.125rem;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background-color: var(--color-surface-high);
+    transition: border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .input-precision:focus {
+    outline: none;
+    border-bottom-color: var(--color-teal);
+  }
+}
+
+/* ── react-phone-number-input overrides ────────────────────────────────────── */
+
+/* Reset the library's own border/outline — our wrapper div handles those */
+.phone-field-wrapper .PhoneInput {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0;
+}
+
+/* Country selector button */
+.phone-field-wrapper .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px 0 12px;
+  border-right: 1px solid #DDE3ED;
+  height: 100%;
+  min-height: 42px;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* The hidden <select> that captures clicks — stretched over the whole country area */
+.phone-field-wrapper .PhoneInputCountrySelect {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Flag emoji */
+.phone-field-wrapper .PhoneInputCountryIcon {
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* The small chevron that the library renders next to the flag */
+.phone-field-wrapper .PhoneInputCountrySelectArrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #5f6578;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+
+/* The actual text input */
+.phone-field-wrapper .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #191c1d;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.phone-field-wrapper .PhoneInputInput::placeholder {
+  color: #909aab;
+}
+
+/* ── Tiptap / Press release article typography ─────────────────────────────── */
+.article-body h1 { font-size: 2rem;    font-weight: 800; line-height: 1.2; margin: 1.75rem 0 0.75rem; font-family: var(--font-display); }
+.article-body h2 { font-size: 1.5rem;  font-weight: 700; line-height: 1.3; margin: 1.5rem 0 0.5rem;   font-family: var(--font-display); }
+.article-body h3 { font-size: 1.25rem; font-weight: 700; line-height: 1.4; margin: 1.25rem 0 0.5rem;  font-family: var(--font-display); }
+.article-body p  { margin: 0 0 1.1rem; line-height: 1.8; color: #3d4354; }
+.article-body p:last-child { margin-bottom: 0; }
+.article-body strong { font-weight: 700; color: #191c1d; }
+.article-body em     { font-style: italic; }
+.article-body u      { text-decoration: underline; }
+.article-body a      { color: #00529B; text-decoration: underline; }
+.article-body a:hover { color: #003b72; }
+.article-body ul, .article-body ol { padding-left: 1.5rem; margin: 0 0 1.1rem; }
+.article-body ul { list-style-type: disc; }
+.article-body ol { list-style-type: decimal; }
+.article-body li { margin-bottom: 0.35rem; line-height: 1.7; color: #3d4354; }
+.article-body blockquote {
+  border-left: 4px solid #00529B;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.25rem;
+  background: #EEF2F8;
+  border-radius: 0 0.25rem 0.25rem 0;
+  font-style: italic;
+  color: #003b72;
+}
+.article-body pre {
+  background: #0a1628;
+  color: #e2e8f0;
+  border-radius: 0.25rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  font-size: 0.875rem;
+}
+.article-body code {
+  background: #EEF2F8;
+  color: #003b72;
+  padding: 0.15em 0.4em;
+  border-radius: 0.125rem;
+  font-size: 0.875em;
+}
+.article-body pre code { background: none; color: inherit; padding: 0; }
+.article-body hr { border: none; border-top: 2px solid #DDE3ED; margin: 2rem 0; }
+.article-body img { max-width: 100%; border-radius: 0.25rem; margin: 1.5rem 0; }
+
+/* ── Reduced motion — disable all animations & transitions for users who need it ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Tiptap editor placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  color: #909aab;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
