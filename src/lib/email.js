@@ -9,9 +9,9 @@ function createTransporter() {
 
   return nodemailer.createTransport({
     host,
-    port:   Number(process.env.SMTP_PORT ?? 587),
+    port: Number(process.env.SMTP_PORT ?? 587),
     secure: Number(process.env.SMTP_PORT) === 465,
-    auth:   { user, pass },
+    auth: { user, pass },
   });
 }
 
@@ -19,13 +19,24 @@ function createTransporter() {
 
 function leadNotificationHtml(lead) {
   const {
-    name, email, phone, company, country,
-    businessType, category, message, createdAt,
+    name,
+    email,
+    phone,
+    company,
+    country,
+    businessType,
+    category,
+    message,
+    createdAt,
   } = lead;
 
   const date = new Date(createdAt).toLocaleString("en-GB", {
-    day: "numeric", month: "long", year: "numeric",
-    hour: "2-digit", minute: "2-digit", timeZoneName: "short",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZoneName: "short",
   });
 
   const row = (label, value) =>
@@ -190,17 +201,18 @@ export async function sendLeadEmails(lead) {
     return;
   }
 
-  const from    = `"Surgical Essence" <${process.env.EMAIL_FROM}>`;
-  const adminTo = process.env.LEAD_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL;
+  const from = `"Surgical Essence" <${process.env.EMAIL_FROM}>`;
+  const adminTo =
+    process.env.LEAD_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL;
 
   const results = await Promise.allSettled([
     // 1. Admin notification
     transporter.sendMail({
       from,
-      to:      adminTo,
+      to: adminTo,
       subject: `New lead: ${lead.name} — ${lead.company} (${lead.country})`,
-      html:    leadNotificationHtml(lead),
-      text:    [
+      html: leadNotificationHtml(lead),
+      text: [
         `New enquiry from ${lead.name} at ${lead.company}`,
         `Country: ${lead.country}`,
         `Business type: ${lead.businessType}`,
@@ -209,16 +221,18 @@ export async function sendLeadEmails(lead) {
         lead.phone ? `Phone: ${lead.phone}` : "",
         ``,
         lead.message,
-      ].filter(Boolean).join("\n"),
+      ]
+        .filter(Boolean)
+        .join("\n"),
     }),
 
     // 2. Confirmation to the lead
     transporter.sendMail({
       from,
-      to:      lead.email,
+      to: lead.email,
       subject: "We've received your enquiry — Surgical Essence",
-      html:    leadConfirmationHtml(lead),
-      text:    `Dear ${lead.name},\n\nThank you for your enquiry. Our team will get back to you within 24 hours.\n\nSurgical Essence\nSialkot, Pakistan`,
+      html: leadConfirmationHtml(lead),
+      text: `Dear ${lead.name},\n\nThank you for your enquiry. Our team will get back to you within 24 hours.\n\nSurgical Essence\nSialkot, Pakistan`,
     }),
   ]);
 
