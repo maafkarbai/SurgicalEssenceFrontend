@@ -44,9 +44,9 @@ export default async function HomePage() {
   return (
     <>
       {/* ══ Hero ════════════════════════════════════════════════════════════ */}
-      <section className="max-w-screen-2xl mx-auto px-8 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <section className="max-w-screen-2xl mx-auto px-8 py-2 md:py-3 grid grid-cols-1 lg:grid-cols-2 gap-5 items-center">
         {/* Left — copy */}
-        <div className="space-y-8">
+        <div className="space-y-4">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-[#77f4e8]/30 text-[#006a63] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">
             <svg
@@ -71,12 +71,12 @@ export default async function HomePage() {
             ISO 13485 &amp; CE Certified
           </div>
 
-          <h1 className="font-headline text-5xl md:text-6xl font-extrabold text-[#003b72] leading-[1.1] tracking-tight">
+          <h1 className="font-headline text-3xl md:text-4xl font-extrabold text-[#003b72] leading-[1.1] tracking-tight">
             Precise Surgical Instruments{" "}
             <span className="text-[#006a63]">You Can Trust</span>
           </h1>
 
-          <p className="text-lg text-[#424751] max-w-xl leading-relaxed">
+          <p className="text-base text-on-surface-variant max-w-xl leading-relaxed">
             High-performance medical tools designed for surgeons, clinics, and
             hospitals worldwide. Engineering excellence meets clinical precision
             in every instrument we manufacture.
@@ -85,13 +85,13 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center bg-[#003b72] text-white px-8 py-4 font-bold rounded hover:bg-[#00529b] transition-all shadow-lg shadow-[#003b72]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+              className="inline-flex items-center justify-center bg-[#003b72] text-white px-6 py-3 font-bold rounded hover:bg-[#00529b] transition-all shadow-lg shadow-[#003b72]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
             >
               Request a Quote
             </Link>
             <Link
               href="/catalog"
-              className="inline-flex items-center justify-center border-2 border-[#003b72] text-[#003b72] px-8 py-4 font-bold rounded hover:bg-[#f3f4f5] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+              className="inline-flex items-center justify-center border-2 border-[#003b72] text-[#003b72] px-6 py-3 font-bold rounded hover:bg-[#f3f4f5] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
             >
               Download Catalog
             </Link>
@@ -99,7 +99,7 @@ export default async function HomePage() {
         </div>
 
         {/* Right — hero image with glow */}
-        <div className="relative group">
+        <div className="relative group max-w-sm lg:max-w-md mx-auto w-full">
           <div
             className="absolute -inset-4 bg-gradient-to-tr from-[#003b72]/10 to-[#006a63]/10 rounded-xl blur-2xl transition-all group-hover:blur-3xl pointer-events-none"
             aria-hidden="true"

@@ -116,6 +116,36 @@ export default function Footer() {
 
             {/* Newsletter signup */}
             <NewsletterForm />
+
+            {/* Shipping options */}
+            <div className="mt-5">
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-2">
+                Shipping Options
+              </p>
+              <div
+                className="flex flex-wrap items-center gap-2"
+                aria-label="Shipping options"
+              >
+                {[
+                  { src: "/dhl.svg", alt: "DHL", w: 78, h: 18 },
+                  { src: "/fedex.svg", alt: "Fedex", w: 56, h: 36 },
+                  { src: "/UPS.svg", alt: "UPS", w: 28, h: 36 },
+                ].map(({ src, alt, w, h }) => (
+                  <div
+                    key={alt}
+                    className="flex items-center justify-center h-9"
+                  >
+                    <Image
+                      src={src}
+                      alt={alt}
+                      width={w}
+                      height={h}
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Col 2 — Our Solutions */}
