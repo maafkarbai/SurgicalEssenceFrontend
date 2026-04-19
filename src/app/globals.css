@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@layer base {
+  button            { cursor: pointer; }
+  button:disabled   { cursor: not-allowed; }
+  [role="tab"]      { cursor: pointer; }
+  select            { cursor: pointer; }
+  label[for]        { cursor: pointer; }
+}
+
 /* Hide scrollbar on carousel track while keeping scroll functionality */
 .catalog-scroll-track {
   scrollbar-width: none;
