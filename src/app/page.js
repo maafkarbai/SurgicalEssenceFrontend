@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import HomeContactForm from "@/app/components/HomeContactForm";
+import { prisma } from "@/lib/prisma";
+import AddToQuoteButton from "@/app/products/[slug]/AddToQuoteButton";
 
 export const metadata = {
   title: "Surgical Essence | Precision Surgical Instruments Manufacturer",
@@ -39,7 +41,14 @@ function readingTime(content) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  const pressReleases = await getLatestPressReleases();
+  const [pressReleases, featuredProduct] = await Promise.all([
+    getLatestPressReleases(),
+    prisma.product.findFirst({
+      where: { active: true, featured: true },
+      select: { id: true, name: true, slug: true, sku: true, description: true, material: true, certifications: true, imageUrls: true, category: { select: { name: true } } },
+      orderBy: { createdAt: "asc" },
+    }),
+  ]);
 
   return (
     <>
@@ -194,6 +203,72 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ══ Products ════════════════════════════════════════════════════════ */}
+      {featuredProduct && (
+        <section className="max-w-screen-2xl mx-auto px-8 py-16">
+          <div className="mb-8 flex items-end justify-between">
+            <div>
+              <h2 className="font-headline text-3xl font-bold text-[#003b72]">
+                Browse Our Products
+              </h2>
+              <div className="w-full h-px bg-slate-200 mt-3" aria-hidden="true" />
+            </div>
+            <Link href="/products" className="text-sm font-semibold text-brand-primary hover:text-brand-dark transition-colors shrink-0 ml-4">
+              View all →
+            </Link>
+          </div>
+
+          <div className="max-w-xs">
+            <article className="flex flex-col bg-surface-lowest rounded-xl overflow-hidden shadow-ambient-sm hover:shadow-ambient hover:-translate-y-1 transition-all duration-200">
+              <div className="relative h-48 bg-surface-low overflow-hidden">
+                {featuredProduct.imageUrls?.[0] ? (
+                  <Image
+                    src={featuredProduct.imageUrls[0]}
+                    alt={featuredProduct.name}
+                    fill
+                    className="object-cover"
+                    sizes="320px"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"
+                      className="w-16 h-16 text-brand-primary/20" aria-hidden="true">
+                      <path d="M20 4L8.5 15.5"/><path d="M8.5 15.5L5 19"/>
+                      <path d="M14 4h6v6"/><path d="M9 9l-5 5"/>
+                      <circle cx="5" cy="19" r="1" fill="currentColor" stroke="none"/>
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col flex-1 p-4 gap-3">
+                {featuredProduct.category && (
+                  <span className="self-start text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-secondary text-brand-primary">
+                    {featuredProduct.category.name}
+                  </span>
+                )}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-text-heading text-base leading-snug">{featuredProduct.name}</h3>
+                  <p className="mt-1 text-sm text-text-body leading-relaxed line-clamp-2">{featuredProduct.description}</p>
+                </div>
+                {featuredProduct.material && (
+                  <span className="text-xs text-text-muted">{featuredProduct.material}</span>
+                )}
+                <div className="flex items-center gap-2">
+                  <AddToQuoteButton product={{ id: featuredProduct.id, name: featuredProduct.name, sku: featuredProduct.sku }} compact />
+                  <Link
+                    href={`/products/${featuredProduct.slug}`}
+                    className="px-3 py-2 rounded border border-gray-200 text-sm font-semibold text-brand-primary hover:border-brand-primary hover:bg-brand-secondary/30 transition-colors"
+                  >
+                    Details
+                  </Link>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      )}
 
       {/* ══ Why Choose Us ═══════════════════════════════════════════════════ */}
       <section
