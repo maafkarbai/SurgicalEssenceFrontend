@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/layout/Footer";
 import ClientOverlays from "@/app/components/layout/ClientOverlays";
+import Providers from "@/app/components/layout/Providers";
 
 // Manrope — display & headlines (editorial authority)
 const ManropeFont = Manrope({
@@ -34,34 +35,36 @@ export default function RootLayout({ children }) {
       <body
         className={`${ManropeFont.variable} ${InterFont.variable} antialiased`}
       >
-        {/* Skip link — first focusable element; visible only on focus */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded focus:bg-brand-primary focus:text-white focus:font-semibold focus:text-sm focus:outline-2 focus:outline-offset-2 focus:outline-white"
-        >
-          Skip to main content
-        </a>
+        <Providers>
+          {/* Skip link — first focusable element; visible only on focus */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded focus:bg-brand-primary focus:text-white focus:font-semibold focus:text-sm focus:outline-2 focus:outline-offset-2 focus:outline-white"
+          >
+            Skip to main content
+          </a>
 
-        {/* Landmark: site-wide navigation */}
-        <header>
-          <Navbar />
-        </header>
+          {/* Landmark: site-wide navigation */}
+          <header>
+            <Navbar />
+          </header>
 
-        {/* Landmark: page content — skip link target */}
-        {/* pt offsets the fixed navbar: mobile h-24 (96px), desktop h-11+h-24+h-14 (196px) */}
-        <main
-          id="main-content"
-          tabIndex={-1}
-          className="outline-none pt-24 md:pt-[196px]"
-        >
-          {children}
-        </main>
+          {/* Landmark: page content — skip link target */}
+          {/* pt offsets the fixed navbar: mobile h-24 (96px), desktop h-11+h-24+h-14 (196px) */}
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="outline-none pt-24 md:pt-[196px]"
+          >
+            {children}
+          </main>
 
-        {/* Landmark: site-wide footer */}
-        <Footer />
+          {/* Landmark: site-wide footer */}
+          <Footer />
 
-        {/* All floating/interactive overlays in one client boundary */}
-        <ClientOverlays />
+          {/* All floating/interactive overlays in one client boundary */}
+          <ClientOverlays />
+        </Providers>
       </body>
     </html>
   );

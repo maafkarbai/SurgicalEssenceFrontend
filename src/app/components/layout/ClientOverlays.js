@@ -4,9 +4,9 @@ import LoadingScreen from "./LoadingScreen";
 import ScrollToTop from "./ScrollToTop";
 import FloatingQuoteButton from "./FloatingQuoteButton";
 import WhatsAppButton from "./WhatsAppButton";
+import AuthModal from "@/app/components/auth/AuthModal";
+import QuoteCartDrawer from "@/app/components/quote/QuoteCartDrawer";
 
-// Groups all floating/interactive overlays into a single client boundary,
-// keeping RootLayout a pure Server Component.
 export default function ClientOverlays() {
   return (
     <>
@@ -14,6 +14,8 @@ export default function ClientOverlays() {
       <ScrollToTop />
       <FloatingQuoteButton />
       <WhatsAppButton />
+      <AuthModal />
+      <QuoteCartDrawer />
     </>
   );
 }

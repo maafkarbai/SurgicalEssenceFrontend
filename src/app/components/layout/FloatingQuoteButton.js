@@ -1,22 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useQuoteCart } from "@/app/context/QuoteCartContext";
 
 export default function FloatingQuoteButton() {
   const [visible, setVisible] = useState(false);
+  const { itemCount, setDrawerOpen } = useQuoteCart();
 
   useEffect(() => {
-    // Show once user scrolls past the hero (~500px)
     const onScroll = () => setVisible(window.scrollY > 500);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <Link
-      href="/contact"
-      aria-label="Get a quote"
+    <button
+      type="button"
+      onClick={() => setDrawerOpen(true)}
+      aria-label={`Open quote cart${itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? "s" : ""}` : ""}`}
       style={{ backgroundColor: "#00529B" }}
       className={`fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 px-5 py-3 rounded text-white text-sm font-bold transition-all duration-300 hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary shadow-ambient ${
         visible
@@ -35,9 +36,16 @@ export default function FloatingQuoteButton() {
         strokeLinejoin="round"
         aria-hidden="true"
       >
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
       </svg>
-      Get a Quote
-    </Link>
+      Quote Cart
+      {itemCount > 0 && (
+        <span className="bg-white/25 text-white text-xs font-bold px-1.5 py-0.5 rounded-full leading-none">
+          {itemCount > 99 ? "99+" : itemCount}
+        </span>
+      )}
+    </button>
   );
 }

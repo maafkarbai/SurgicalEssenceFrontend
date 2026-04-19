@@ -5,6 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import SearchModal from "@/app/components/SearchModal";
+import { useAuth } from "@/app/context/AuthContext";
+import { useQuoteCart } from "@/app/context/QuoteCartContext";
 
 const CATEGORIES = [
   {
@@ -131,6 +133,23 @@ const MailIcon = () => (
   </svg>
 );
 
+const CartIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 const ChevronDown = ({ open }) => (
   <svg
     width="12"
@@ -209,8 +228,13 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const pathname = usePathname();
   const dropdownRef = useRef(null);
+  const userMenuRef = useRef(null);
+
+  const { itemCount, setDrawerOpen } = useQuoteCart();
+  const { user, loading: authLoading, openLogin, openRegister, logout } = useAuth();
 
   const isActive = (href) => {
     if (href === "/") return pathname === "/";
@@ -249,6 +273,15 @@ const Navbar = () => {
     const onClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target))
         setDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  useEffect(() => {
+    const onClick = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target))
+        setUserMenuOpen(false);
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
@@ -328,6 +361,73 @@ const Navbar = () => {
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
+          {/* Cart button */}
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label={`Open quote cart${itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? "s" : ""}` : ""}`}
+            className="relative flex items-center justify-center w-10 h-10 rounded border border-border text-text-body hover:text-brand-primary hover:border-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+          >
+            <CartIcon />
+            {itemCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] rounded-full bg-brand-primary text-white text-[10px] font-bold flex items-center justify-center px-1 leading-none">
+                {itemCount > 99 ? "99+" : itemCount}
+              </span>
+            )}
+          </button>
+
+          {/* Auth */}
+          {!authLoading && (
+            user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  aria-label="Account menu"
+                  aria-expanded={userMenuOpen}
+                  className="flex items-center gap-2 px-2.5 h-10 rounded border border-border text-text-body hover:border-brand-primary hover:text-brand-primary transition-colors text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                >
+                  <span className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
+                    {user.name?.[0]?.toUpperCase() ?? user.email[0].toUpperCase()}
+                  </span>
+                  <span className="hidden lg:inline max-w-[80px] truncate text-sm">
+                    {user.name?.split(" ")[0] ?? "Account"}
+                  </span>
+                  <ChevronDown open={userMenuOpen} />
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                    <p className="px-4 py-2 text-xs text-gray-400 border-b border-gray-100 truncate">{user.email}</p>
+                    <Link
+                      href="/my-account"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand-primary transition-colors"
+                    >
+                      My Account
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => { logout(); setUserMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={openLogin}
+                aria-label="Sign in to your account"
+                className="flex items-center gap-1.5 px-3 h-10 rounded border border-border text-text-body hover:border-brand-primary hover:text-brand-primary transition-colors text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <UserIcon />
+                Sign In
+              </button>
+            )
+          )}
+
           <Link href="/catalog" className="btn-outline py-2 px-4 text-sm">
             <CatalogIcon />
             View Catalog
@@ -337,8 +437,47 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile: search + hamburger */}
-        <div className="md:hidden flex items-center gap-2 ml-auto">
+        {/* Mobile: cart + auth + search + hamburger */}
+        <div className="md:hidden flex items-center gap-1.5 ml-auto">
+          {/* Mobile cart icon */}
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label={`Open quote cart${itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? "s" : ""}` : ""}`}
+            className="relative flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+          >
+            <CartIcon />
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-brand-primary text-white text-[9px] font-bold flex items-center justify-center px-0.5 leading-none">
+                {itemCount > 99 ? "99+" : itemCount}
+              </span>
+            )}
+          </button>
+
+          {/* Mobile auth icon */}
+          {!authLoading && (
+            user ? (
+              <Link
+                href="/my-account"
+                aria-label="My account"
+                className="flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <span className="w-5 h-5 rounded-full bg-brand-primary text-white text-[10px] font-bold flex items-center justify-center">
+                  {user.name?.[0]?.toUpperCase() ?? user.email[0].toUpperCase()}
+                </span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={openLogin}
+                aria-label="Sign in"
+                className="flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+              >
+                <UserIcon />
+              </button>
+            )
+          )}
+
           <button
             type="button"
             onClick={() => setSearchOpen((v) => !v)}
