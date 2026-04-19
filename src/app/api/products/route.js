@@ -7,6 +7,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
 
     const cat    = searchParams.get("cat")    ?? undefined;
+    const subcat = searchParams.get("subcat") ?? undefined;
     const search = searchParams.get("search") ?? "";
     const page   = Math.max(1, Number(searchParams.get("page")  ?? 1));
     const limit  = Math.min(100, Math.max(1, Number(searchParams.get("limit") ?? 24)));
@@ -14,7 +15,11 @@ export async function GET(request) {
 
     const where = {
       active: true,
-      ...(cat && { category: { slug: cat } }),
+      ...(subcat
+        ? { subcategory: { slug: subcat } }
+        : cat
+        ? { category: { slug: cat } }
+        : {}),
       ...(search.trim() && {
         OR: [
           { name:        { contains: search, mode: "insensitive" } },
