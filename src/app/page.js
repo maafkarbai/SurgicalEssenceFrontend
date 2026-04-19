@@ -138,15 +138,33 @@ export default async function HomePage() {
       {/* ══ Product Categories ══════════════════════════════════════════════ */}
       <section className="max-w-screen-2xl mx-auto px-8 py-16">
         <div className="mb-8">
-          <h2 className="font-headline text-3xl font-bold text-[#003b72]">Popular Categories</h2>
+          <h2 className="font-headline text-3xl font-bold text-[#003b72]">
+            Popular Categories
+          </h2>
           <div className="w-full h-px bg-slate-200 mt-3" aria-hidden="true" />
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { name: "Surgical",    href: "/products?cat=surgical",   image: "/images/catalog/SurgicalInstrumentsBanner.png"  },
-            { name: "Dental",      href: "/products?cat=dental",     image: "/images/catalog/DentalInstrumentsBanner.png"    },
-            { name: "Beauty Care", href: "/products?cat=beauty",     image: "/images/catalog/BeautyInstrumentsBanner.png"    },
-            { name: "Ophthalmic",  href: "/products?cat=ophthalmic", image: "/images/catalog/OpthalmicInstrumentsBanner.png" },
+            {
+              name: "Surgical",
+              href: "/products?cat=surgical",
+              image: "/images/catalog/SurgicalInstrumentsBanner.png",
+            },
+            {
+              name: "Dental",
+              href: "/products?cat=dental",
+              image: "/images/catalog/DentalInstrumentsBanner.png",
+            },
+            {
+              name: "Beauty Care",
+              href: "/products?cat=beauty",
+              image: "/images/catalog/BeautyInstrumentsBanner.png",
+            },
+            {
+              name: "Ophthalmic",
+              href: "/products?cat=ophthalmic",
+              image: "/images/catalog/OpthalmicInstrumentsBanner.png",
+            },
           ].map(({ name, href, image }) => (
             <Link
               key={name}
@@ -178,7 +196,10 @@ export default async function HomePage() {
       </section>
 
       {/* ══ Why Choose Us ═══════════════════════════════════════════════════ */}
-      <section aria-labelledby="why-us-heading" className="bg-slate-50 py-24">
+      <section
+        aria-labelledby="why-us-heading"
+        className="bg-[#f5f5f5] border-y-[0.5] py-24"
+      >
         <div className="max-w-screen-2xl mx-auto px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2

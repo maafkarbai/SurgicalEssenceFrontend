@@ -124,7 +124,7 @@ export default function AdminProductsPage() {
           />
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-brand-primary text-white text-sm font-semibold hover:bg-brand-dark transition-colors"
+            className="px-4 py-2 rounded-lg bg-brand-primary text-white text-sm font-semibold hover:bg-brand-dark transition-colors cursor-pointer"
           >
             Search
           </button>
@@ -150,10 +150,12 @@ export default function AdminProductsPage() {
           </div>
         ) : (
           <div className="bg-white rounded-xl border border-gray-200 overflow-x-auto">
-            <table className="w-full text-sm min-w-[640px]">
+            <table className="w-full text-sm min-w-160">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50 text-left">
-                  <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400 w-8" aria-label="Status" />
+                  <th scope="col" className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400 w-8">
+                    <span className="sr-only">Status</span>
+                  </th>
                   <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400">Name</th>
                   <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400">SKU</th>
                   <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400 hidden md:table-cell">Category</th>
@@ -173,7 +175,7 @@ export default function AdminProductsPage() {
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-900 truncate max-w-[200px]">{p.name}</span>
+                        <span className="font-semibold text-gray-900 truncate max-w-50">{p.name}</span>
                         {p.featured && (
                           <span className="shrink-0 text-xs font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-700">
                             Featured

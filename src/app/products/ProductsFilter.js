@@ -103,7 +103,7 @@ function ProductCard({ product }) {
           <button
             type="button"
             onClick={handleAddToQuote}
-            className="flex-1 py-2 rounded text-sm font-bold text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            className="flex-1 py-2 rounded text-sm font-bold text-white transition-opacity hover:opacity-90 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             style={{ background: "linear-gradient(135deg, #003b72, #00529B)" }}
           >
             + Quote
@@ -208,7 +208,7 @@ function ProductsFilterContent() {
               type="button"
               onClick={clearFilters}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-heading transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-heading transition-colors cursor-pointer"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
@@ -229,7 +229,7 @@ function ProductsFilterContent() {
               aria-controls="product-grid"
               onClick={() => setTab("")}
               style={isActive ? { background: "linear-gradient(135deg, #003b72, #00529B)" } : {}}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-brand-primary ${
                 isActive ? "text-white shadow-ambient-sm" : "bg-surface-low text-text-body hover:bg-surface-high"
               }`}
             >
@@ -251,7 +251,7 @@ function ProductsFilterContent() {
               aria-controls="product-grid"
               onClick={() => setTab(cat.slug)}
               style={isActive ? { background: "linear-gradient(135deg, #003b72, #00529B)" } : {}}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary ${
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 cursor-pointer focus-visible:outline-brand-primary ${
                 isActive ? "text-white shadow-ambient-sm" : "bg-surface-low text-text-body hover:bg-surface-high"
               }`}
             >
@@ -293,7 +293,7 @@ function ProductsFilterContent() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="text-sm font-semibold text-brand-primary hover:text-brand-dark transition-colors"
+                className="text-sm font-semibold text-brand-primary hover:text-brand-dark transition-colors cursor-pointer"
               >
                 Clear filters
               </button>
