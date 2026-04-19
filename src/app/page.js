@@ -101,7 +101,7 @@ export default async function HomePage() {
         {/* Right — hero image with glow */}
         <div className="relative group">
           <div
-            className="absolute -inset-4 bg-gradient-to-tr from-[#003b72]/10 to-[#006a63]/10 rounded-xl blur-2xl transition-all group-hover:blur-3xl"
+            className="absolute -inset-4 bg-gradient-to-tr from-[#003b72]/10 to-[#006a63]/10 rounded-xl blur-2xl transition-all group-hover:blur-3xl pointer-events-none"
             aria-hidden="true"
           />
           <div
@@ -117,6 +117,21 @@ export default async function HomePage() {
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
+
+          {/* Certifications strip */}
+          <Link
+            href="/certifications"
+            className="mt-3 block rounded-lg overflow-hidden hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+            aria-label="View our certifications — SCCI, CE Class I, ISO 13485, ISO 9001"
+          >
+            <Image
+              src="/images/certifications/CertificationsLogos.png"
+              alt="Our certifications: SCCI Chamber of Commerce, CE Class I, ISO 13485, ISO 9001"
+              width={1160}
+              height={232}
+              className="w-full h-auto"
+            />
+          </Link>
         </div>
       </section>
 

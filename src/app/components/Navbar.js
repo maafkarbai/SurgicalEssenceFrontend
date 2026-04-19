@@ -694,6 +694,55 @@ const Navbar = () => {
             >
               Get a Quote
             </Link>
+
+            {/* Auth section */}
+            {!authLoading && (
+              user ? (
+                <div className="pt-2 border-t border-gray-100 mt-1 flex flex-col gap-0.5">
+                  <div className="flex items-center gap-3 px-3 py-2">
+                    <span className="w-8 h-8 rounded-full bg-brand-primary text-white text-sm font-bold flex items-center justify-center shrink-0">
+                      {user.name?.[0]?.toUpperCase() ?? user.email[0].toUpperCase()}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 truncate">{user.name ?? "Account"}</p>
+                      <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/my-account"
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-3 py-2 rounded text-sm text-gray-700 font-medium hover:text-brand-primary hover:bg-slate-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  >
+                    My Account
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => { logout(); setMenuOpen(false); }}
+                    className="w-full text-left px-3 py-2 rounded text-sm text-red-600 font-medium hover:bg-red-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-2 border-t border-gray-100 mt-1 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => { openLogin(); setMenuOpen(false); }}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded border border-brand-primary text-brand-primary text-sm font-semibold hover:bg-brand-secondary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  >
+                    <UserIcon />
+                    Sign In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { openRegister(); setMenuOpen(false); }}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded bg-brand-primary text-white text-sm font-semibold hover:bg-brand-dark transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  >
+                    Register
+                  </button>
+                </div>
+              )
+            )}
           </div>
         </div>
       )}

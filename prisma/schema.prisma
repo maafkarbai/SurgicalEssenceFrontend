@@ -99,3 +99,84 @@ model QuoteItem {
 
   @@index([quoteRequestId])
 }
+
+// ─── Product Catalogue ────────────────────────────────────────────────────────
+
+model Category {
+  id            String        @id @default(cuid())
+  name          String
+  slug          String        @unique
+  description   String?
+  imageUrl      String?
+  sortOrder     Int           @default(0)
+  active        Boolean       @default(true)
+  subcategories Subcategory[]
+  products      Product[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([active])
+}
+
+model Subcategory {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  sortOrder   Int       @default(0)
+  active      Boolean   @default(true)
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([slug])
+}
+
+model Product {
+  id             String           @id @default(cuid())
+  sku            String           @unique
+  name           String
+  slug           String           @unique
+  description    String?          @db.Text
+  material       String?
+  usage          String?          @db.Text
+  sterilization  String?
+  certifications String[]
+  imageUrls      String[]
+  pdfUrl         String?
+  active         Boolean          @default(true)
+  featured       Boolean          @default(false)
+  categoryId     String?
+  category       Category?        @relation(fields: [categoryId], references: [id])
+  subcategoryId  String?
+  subcategory    Subcategory?     @relation(fields: [subcategoryId], references: [id])
+  variants       ProductVariant[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([categoryId])
+  @@index([subcategoryId])
+  @@index([active])
+  @@index([slug])
+  @@index([featured])
+}
+
+model ProductVariant {
+  id          String   @id @default(cuid())
+  sku         String   @unique
+  name        String
+  description String?
+  imageUrls   String[]
+  active      Boolean  @default(true)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([productId])
+}
