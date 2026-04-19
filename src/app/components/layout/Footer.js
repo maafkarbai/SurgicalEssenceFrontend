@@ -224,7 +224,7 @@ export default function Footer() {
                 </span>
                 <a
                   href="mailto:info@surgicalessence.com"
-                  className="hover:text-[#00529b] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00529b] rounded break-all"
+                  className="hover:text-[#00529b] font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00529b] rounded break-all"
                 >
                   info@surgicalessence.com
                 </a>
