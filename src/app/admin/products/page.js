@@ -87,6 +87,12 @@ export default function AdminProductsPage() {
             >
               Leads
             </Link>
+            <Link
+              href="/admin/categories"
+              className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              Categories
+            </Link>
           </nav>
         </div>
 

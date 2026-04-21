@@ -279,6 +279,12 @@ export default function AdminLeadsPage() {
             {/* Nav between admin sections */}
             <nav className="hidden sm:flex items-center gap-1 ml-4">
               <Link
+                href="/admin/products"
+                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                Products
+              </Link>
+              <Link
                 href="/admin/press-releases"
                 className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
               >
@@ -287,6 +293,12 @@ export default function AdminLeadsPage() {
               <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">
                 Leads
               </span>
+              <Link
+                href="/admin/categories"
+                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                Categories
+              </Link>
             </nav>
           </div>
 

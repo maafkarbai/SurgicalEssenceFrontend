@@ -3,6 +3,9 @@
  * Returns { success: true } or { success: false, error: string }
  */
 export async function verifyHcaptcha(token) {
+  // Skip verification in development — hCaptcha requires valid keys in production
+  if (process.env.NODE_ENV !== "production") return { success: true };
+
   if (!token) return { success: false, error: "Please complete the CAPTCHA." };
 
   const res = await fetch("https://hcaptcha.com/siteverify", {

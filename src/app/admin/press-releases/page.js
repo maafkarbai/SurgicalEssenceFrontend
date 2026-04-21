@@ -60,6 +60,12 @@ export default function AdminPressReleasesPage() {
             <p className="text-xs text-gray-500">Admin panel</p>
           </div>
           <nav className="hidden sm:flex items-center gap-1 ml-4">
+            <Link
+              href="/admin/products"
+              className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              Products
+            </Link>
             <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">
               Press Releases
             </span>
@@ -68,6 +74,12 @@ export default function AdminPressReleasesPage() {
               className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
             >
               Leads
+            </Link>
+            <Link
+              href="/admin/categories"
+              className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              Categories
             </Link>
           </nav>
         </div>
