@@ -350,7 +350,7 @@ export default function Footer() {
               Terms of Use
             </Link>
             <Link
-              href="/sitemap"
+              href="/site-map"
               className="text-slate-600 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
             >
               Sitemap
