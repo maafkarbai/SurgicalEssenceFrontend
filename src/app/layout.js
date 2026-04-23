@@ -20,6 +20,7 @@ const InterFont = Inter({
 });
 
 export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://surgicalessence.com"),
   title: "Surgical Essence",
   description:
     "Surgical Essence is an international surgical instruments manufacturer and supplier. We provide high-quality surgical instruments to healthcare professionals worldwide. Our products are designed to meet the needs of surgeons and healthcare providers, ensuring precision, reliability, and durability in every instrument we offer.",

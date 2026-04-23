@@ -114,6 +114,20 @@ export const metadata = {
   title: "Quality Control | Surgical Essence",
   description:
     "Learn how Surgical Essence ensures the highest quality in every surgical and dental instrument — from raw material selection to final visual inspection.",
+  openGraph: {
+    title: "Quality Control | Surgical Essence",
+    description:
+      "Learn how Surgical Essence ensures the highest quality in every surgical and dental instrument — from raw material selection to final visual inspection.",
+    images: [{ url: "/images/Quality Control Image.jpg", width: 1200, height: 630, alt: "Surgical Essence quality control process" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Quality Control | Surgical Essence",
+    description:
+      "Learn how Surgical Essence ensures the highest quality in every surgical and dental instrument — from raw material selection to final visual inspection.",
+    images: ["/images/Quality Control Image.jpg"],
+  },
 };
 
 export default function QualityControlPage() {

@@ -211,6 +211,20 @@ export const metadata = {
   title: "Product Catalogs | Surgical Essence",
   description:
     "Download product catalogs for Surgical Essence's full range of surgical, dental, beauty care, ophthalmic, and single-use instruments.",
+  openGraph: {
+    title: "Product Catalogs | Surgical Essence",
+    description:
+      "Download product catalogs for Surgical Essence's full range of surgical, dental, beauty care, ophthalmic, and single-use instruments.",
+    images: [{ url: "/images/catalog/SurgicalInstrumentsBanner.png", width: 1200, height: 630, alt: "Surgical Essence product catalogs" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Product Catalogs | Surgical Essence",
+    description:
+      "Download product catalogs for Surgical Essence's full range of surgical, dental, beauty care, ophthalmic, and single-use instruments.",
+    images: ["/images/catalog/SurgicalInstrumentsBanner.png"],
+  },
 };
 
 export default function CatalogPage() {

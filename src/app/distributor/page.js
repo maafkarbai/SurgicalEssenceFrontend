@@ -6,6 +6,20 @@ export const metadata = {
   title: "Become a Distributor | Surgical Essence",
   description:
     "Partner with Surgical Essence as an authorised distributor. ISO-certified surgical instruments from Sialkot, Pakistan. Factory-direct pricing, territory exclusivity, and full marketing support.",
+  openGraph: {
+    title: "Become a Distributor | Surgical Essence",
+    description:
+      "Partner with Surgical Essence as an authorised distributor. ISO-certified surgical instruments from Sialkot, Pakistan. Factory-direct pricing, territory exclusivity, and full marketing support.",
+    images: [{ url: "/images/hero/DistributorBanner.jpg", width: 1200, height: 630, alt: "Surgical Essence distributor partnership" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Become a Distributor | Surgical Essence",
+    description:
+      "Partner with Surgical Essence as an authorised distributor. ISO-certified surgical instruments from Sialkot, Pakistan. Factory-direct pricing, territory exclusivity, and full marketing support.",
+    images: ["/images/hero/DistributorBanner.jpg"],
+  },
 };
 
 // ─── Static data ──────────────────────────────────────────────────────────────

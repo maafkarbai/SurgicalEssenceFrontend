@@ -6,6 +6,20 @@ export const metadata = {
   title: "Request a Quote | Surgical Essence",
   description:
     "Get in touch with Surgical Essence for pricing, samples, and lead times on surgical, dental, ophthalmic, and beauty care instruments. We respond within 24 hours.",
+  openGraph: {
+    title: "Request a Quote | Surgical Essence",
+    description:
+      "Get in touch with Surgical Essence for pricing, samples, and lead times on surgical, dental, ophthalmic, and beauty care instruments. We respond within 24 hours.",
+    images: [{ url: "/images/hero/Hero.png", width: 1200, height: 630, alt: "Surgical Essence — request a quote" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Request a Quote | Surgical Essence",
+    description:
+      "Get in touch with Surgical Essence for pricing, samples, and lead times on surgical, dental, ophthalmic, and beauty care instruments. We respond within 24 hours.",
+    images: ["/images/hero/Hero.png"],
+  },
 };
 
 // ─── Icons (Server Component — no interactivity needed) ───────────────────────

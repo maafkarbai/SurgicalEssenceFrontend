@@ -5,6 +5,20 @@ export const metadata = {
   title: "About Us | Surgical Essence",
   description:
     "Surgical Essence has manufactured precision surgical instruments in Sialkot, Pakistan since 1986. ISO 9001:2015 certified, CE Marked, and FDA Listed — supplying hospitals and distributors in 50+ countries.",
+  openGraph: {
+    title: "About Us | Surgical Essence",
+    description:
+      "Surgical Essence has manufactured precision surgical instruments in Sialkot, Pakistan since 1986. ISO 9001:2015 certified, CE Marked, and FDA Listed — supplying hospitals and distributors in 50+ countries.",
+    images: [{ url: "/images/hero/Hero.png", width: 1200, height: 630, alt: "Surgical Essence — precision surgical instruments from Sialkot" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us | Surgical Essence",
+    description:
+      "Surgical Essence has manufactured precision surgical instruments in Sialkot, Pakistan since 1986. ISO 9001:2015 certified, CE Marked, and FDA Listed — supplying hospitals and distributors in 50+ countries.",
+    images: ["/images/hero/Hero.png"],
+  },
 };
 
 // ─── Data ────────────────────────────────────────────────────────────────────

@@ -5,6 +5,20 @@ export const metadata = {
   title: "Our Instruments | Surgical Essence",
   description:
     "Browse our full range of precision-engineered surgical, dental, beauty, and ophthalmic instruments. ISO-certified and exported worldwide from Sialkot, Pakistan.",
+  openGraph: {
+    title: "Our Instruments | Surgical Essence",
+    description:
+      "Browse our full range of precision-engineered surgical, dental, beauty, and ophthalmic instruments. ISO-certified and exported worldwide from Sialkot, Pakistan.",
+    images: [{ url: "/images/hero/Hero.png", width: 1200, height: 630, alt: "Surgical Essence instrument catalogue" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Our Instruments | Surgical Essence",
+    description:
+      "Browse our full range of precision-engineered surgical, dental, beauty, and ophthalmic instruments. ISO-certified and exported worldwide from Sialkot, Pakistan.",
+    images: ["/images/hero/Hero.png"],
+  },
 };
 
 // Static hero — rendered on the server, zero client JS

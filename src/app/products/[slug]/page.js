@@ -8,12 +8,27 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const product = await prisma.product.findUnique({
     where: { slug, active: true },
-    select: { name: true, description: true },
+    select: { name: true, description: true, imageUrls: true },
   });
   if (!product) return {};
+  const title = `${product.name} | Surgical Essence`;
+  const description = product.description?.slice(0, 155) ?? undefined;
+  const image = product.imageUrls?.[0];
   return {
-    title: `${product.name} | Surgical Essence`,
-    description: product.description?.slice(0, 155) ?? undefined,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      ...(image && { images: [{ url: image, width: 1200, height: 630, alt: product.name }] }),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(image && { images: [image] }),
+    },
   };
 }
 
