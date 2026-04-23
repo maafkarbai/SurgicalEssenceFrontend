@@ -103,6 +103,7 @@ export default function SearchModal({ onClose }) {
 
   const inputRef    = useRef(null);
   const listRef     = useRef(null);
+  const panelRef    = useRef(null);
   const router      = useRouter();
   const listboxId   = useId();
   const inputId     = useId();
@@ -124,6 +125,28 @@ export default function SearchModal({ onClose }) {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = prev; };
+  }, []);
+
+  // Tab trap within the modal panel
+  useEffect(() => {
+    const handleTab = (e) => {
+      if (e.key !== "Tab" || !panelRef.current) return;
+      const focusables = panelRef.current.querySelectorAll(
+        'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleTab);
+    return () => document.removeEventListener("keydown", handleTab);
   }, []);
 
   // Navigate to product's category page
@@ -189,6 +212,7 @@ export default function SearchModal({ onClose }) {
 
       {/* Modal panel */}
       <div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label="Search surgical instruments"

@@ -277,28 +277,13 @@ export default function AdminLeadsPage() {
               <p className="text-xs text-gray-500">Admin panel</p>
             </div>
             {/* Nav between admin sections */}
-            <nav className="hidden sm:flex items-center gap-1 ml-4">
-              <Link
-                href="/admin/products"
-                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                Products
-              </Link>
-              <Link
-                href="/admin/press-releases"
-                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                Press Releases
-              </Link>
-              <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">
-                Leads
-              </span>
-              <Link
-                href="/admin/categories"
-                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                Categories
-              </Link>
+            <nav className="hidden sm:flex items-center gap-1 ml-4" aria-label="Admin navigation">
+              <Link href="/admin"                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Dashboard</Link>
+              <Link href="/admin/products"       className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Products</Link>
+              <Link href="/admin/categories"     className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Categories</Link>
+              <Link href="/admin/press-releases" className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Press Releases</Link>
+              <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">Leads</span>
+              <Link href="/admin/quotes"         className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Quotes</Link>
             </nav>
           </div>
 
@@ -448,14 +433,14 @@ export default function AdminLeadsPage() {
                         className="hover:bg-slate-50/40 cursor-pointer transition-colors"
                       >
                         <td className="px-4 py-3">
-                          <p className="font-semibold text-gray-900 truncate max-w-[180px]">{lead.name}</p>
-                          <p className="text-xs text-gray-400 truncate max-w-[180px]">{lead.company}</p>
+                          <p className="font-semibold text-gray-900 truncate max-w-45">{lead.name}</p>
+                          <p className="text-xs text-gray-400 truncate max-w-45">{lead.company}</p>
                         </td>
                         <td className="px-4 py-3">
                           <a
                             href={`mailto:${lead.email}`}
                             onClick={(e) => e.stopPropagation()}
-                            className="text-brand-primary hover:underline truncate block max-w-[200px]"
+                            className="text-brand-primary hover:underline truncate block max-w-50"
                           >
                             {lead.email}
                           </a>

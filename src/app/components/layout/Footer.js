@@ -297,6 +297,39 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* ── Certifications ── */}
+        <div className="max-w-screen-2xl mx-auto px-8 mt-12">
+          <div className="border-t border-slate-200 pt-8">
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-4 text-center">
+              Certifications
+            </p>
+            <div
+              className="flex flex-wrap justify-center items-center gap-6"
+              aria-label="Quality certifications"
+            >
+              <div className="flex items-center justify-center h-14">
+                <Image
+                  src="/ISO_Logo_(Red_square).svg"
+                  alt="ISO Certified"
+                  width={56}
+                  height={56}
+                  className="object-contain"
+                />
+              </div>
+
+              <div className="flex items-center justify-center h-14">
+                <Image
+                  src="/ce-mark.svg"
+                  alt="CE Mark Certified"
+                  width={112}
+                  height={79}
+                  className="object-contain h-14 w-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* ── Bottom bar ── */}
         <div className="max-w-screen-2xl mx-auto px-8 mt-16 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-slate-500 text-sm">
@@ -306,19 +339,19 @@ export default function Footer() {
           <div className="flex gap-6 text-sm">
             <Link
               href="/privacy"
-              className="text-slate-400 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
+              className="text-slate-600 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-slate-400 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
+              className="text-slate-600 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
             >
               Terms of Use
             </Link>
             <Link
               href="/sitemap"
-              className="text-slate-400 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
+              className="text-slate-600 hover:text-[#00529b] transition-colors focus-visible:outline-1 focus-visible:outline-[#00529b] rounded"
             >
               Sitemap
             </Link>

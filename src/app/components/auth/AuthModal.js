@@ -166,6 +166,7 @@ function RegisterForm({ onSuccess }) {
 export default function AuthModal() {
   const { modalOpen, modalTab, setModalTab, closeModal } = useAuth();
   const overlayRef = useRef(null);
+  const panelRef   = useRef(null);
 
   // Close on Escape
   useEffect(() => {
@@ -181,6 +182,29 @@ export default function AuthModal() {
     return () => { document.body.style.overflow = ""; };
   }, [modalOpen]);
 
+  // Tab trap within the modal panel
+  useEffect(() => {
+    if (!modalOpen) return;
+    const handleTab = (e) => {
+      if (e.key !== "Tab" || !panelRef.current) return;
+      const focusables = panelRef.current.querySelectorAll(
+        'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleTab);
+    return () => document.removeEventListener("keydown", handleTab);
+  }, [modalOpen]);
+
   if (!modalOpen) return null;
 
   return (
@@ -192,7 +216,7 @@ export default function AuthModal() {
       aria-modal="true"
       aria-label={modalTab === "login" ? "Sign in to your account" : "Create an account"}
     >
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div ref={panelRef} className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex gap-1 bg-gray-100 rounded-lg p-1">

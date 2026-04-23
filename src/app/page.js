@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import HomeContactForm from "@/app/components/HomeContactForm";
 import HomepageProductBrowser from "@/app/components/HomepageProductBrowser";
+import NewsletterSection from "@/app/components/NewsletterSection";
 import { prisma } from "@/lib/prisma";
 import AddToQuoteButton from "@/app/products/[slug]/AddToQuoteButton";
 
@@ -105,9 +106,9 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center bg-[#003b72] text-white px-6 py-3 font-bold rounded hover:bg-[#00529b] transition-all shadow-lg shadow-[#003b72]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+              className="inline-flex items-center justify-center bg-[#003b72] text-white px-6 py-3 font-bold rounded hover:bg-primary-container transition-all shadow-lg shadow-[#003b72]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
             >
-              Request a Quote
+              Get a Quote
             </Link>
             <Link
               href="/catalog"
@@ -125,7 +126,7 @@ export default async function HomePage() {
             aria-hidden="true"
           />
           <div
-            className="relative rounded-xl overflow-hidden aspect-[16/9]"
+            className="relative rounded-xl overflow-hidden aspect-video"
             style={{ boxShadow: "0 16px 32px rgba(0,59,114,0.12)" }}
           >
             <Image
@@ -138,20 +139,29 @@ export default async function HomePage() {
             />
           </div>
 
-          {/* Certifications strip */}
-          <Link
-            href="/certifications"
-            className="mt-3 block rounded-lg overflow-hidden hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
-            aria-label="View our certifications — SCCI, CE Class I, ISO 13485, ISO 9001"
+          {/* Certification badges */}
+          <div
+            className="mt-3 flex items-center justify-center gap-2"
+            aria-label="Quality certifications"
           >
-            <Image
-              src="/images/certifications/CertificationsLogos.png"
-              alt="Our certifications: SCCI Chamber of Commerce, CE Class I, ISO 13485, ISO 9001"
-              width={1160}
-              height={232}
-              className="w-full h-auto"
-            />
-          </Link>
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg px-4 py-2.5 shadow-sm">
+              <Image
+                src="/ISO_Logo_(Red_square).svg"
+                alt="ISO Certified"
+                width={56}
+                height={56}
+                className="object-contain h-9 w-auto"
+              />
+              <span className="w-px h-6 bg-slate-200" aria-hidden="true" />
+              <Image
+                src="/ce-mark.svg"
+                alt="CE Mark Certified"
+                width={112}
+                height={79}
+                className="object-contain h-9 w-auto"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -192,7 +202,7 @@ export default async function HomePage() {
               className="group rounded-xl overflow-hidden block border border-slate-200 hover:border-[#003b72] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
             >
               {/* Image — cover fills edge to edge, aspect ratio matches landscape banners */}
-              <div className="relative aspect-[16/9]">
+              <div className="relative aspect-video">
                 <Image
                   src={image}
                   alt={`${name} instruments`}
@@ -221,123 +231,101 @@ export default async function HomePage() {
       </section>
 
       {/* ══ Why Choose Us ═══════════════════════════════════════════════════ */}
-      <section
-        aria-labelledby="why-us-heading"
-        className="bg-[#f5f5f5] border-y-[0.5] py-24"
-      >
+      <section aria-labelledby="why-us-heading" className="bg-[#f5f5f5] py-24">
         <div className="max-w-screen-2xl mx-auto px-8">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2
-              id="why-us-heading"
-              className="font-headline text-3xl font-bold text-[#003b72]"
-            >
-              The Surgical Essence Advantage
-            </h2>
-            <div className="w-full h-px bg-slate-300 mt-4" aria-hidden="true" />
-            <p className="text-[#424751] mt-4 leading-relaxed">
-              We combine heritage craftsmanship with modern manufacturing
-              standards to deliver unmatched reliability.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            {[
-              {
-                label: "Certified Quality",
-                desc: "Strict adherence to ISO 13485 and CE mark requirements.",
-                icon: (
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    <polyline points="9 12 11 14 15 10" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+
+            {/* ── Left column ── */}
+            <div className="flex flex-col gap-4">
+              {/* Certified Quality */}
+              <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 flex-1" style={{ boxShadow: "0 4px 24px rgba(0,59,114,0.06)" }}>
+                <div className="w-12 h-12 rounded-xl bg-[#f0f7ff] flex items-center justify-center text-[#006a63] shrink-0">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
                   </svg>
-                ),
-              },
-              {
-                label: "Global Shipping",
-                desc: "Efficient logistics network reaching healthcare hubs worldwide.",
-                icon: (
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="2" y1="12" x2="22" y2="12" />
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                  </svg>
-                ),
-              },
-              {
-                label: "Custom Branding",
-                desc: "Laser engraving and private labeling for your medical brand.",
-                icon: (
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <polyline points="4 7 4 4 20 4 20 7" />
-                    <line x1="9" y1="20" x2="15" y2="20" />
-                    <line x1="12" y1="4" x2="12" y2="20" />
-                  </svg>
-                ),
-              },
-              {
-                label: "Bulk Pricing",
-                desc: "Tiered pricing structures optimized for hospital procurement.",
-                icon: (
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-                    <line x1="1" y1="10" x2="23" y2="10" />
-                  </svg>
-                ),
-              },
-            ].map(({ label, desc, icon }) => (
-              <div
-                key={label}
-                className="flex flex-col items-center text-center group"
-              >
-                <div
-                  className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-[#006a63] mb-6 group-hover:scale-110 transition-transform"
-                  style={{ boxShadow: "0 16px 32px rgba(0,59,114,0.06)" }}
-                >
-                  {icon}
                 </div>
-                <h4 className="font-bold text-[#191c1d] mb-2">{label}</h4>
-                <p className="text-sm text-[#424751]">{desc}</p>
+                <div>
+                  <h3 className="font-bold text-[#191c1d] mb-1">Certified Quality</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">Strict adherence to ISO 13485 and CE mark requirements across every product line.</p>
+                </div>
               </div>
-            ))}
+
+              {/* Custom Branding */}
+              <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 flex-1" style={{ boxShadow: "0 4px 24px rgba(0,59,114,0.06)" }}>
+                <div className="w-12 h-12 rounded-xl bg-[#f0f7ff] flex items-center justify-center text-[#006a63] shrink-0">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="4 7 4 4 20 4 20 7"/>
+                    <line x1="9" y1="20" x2="15" y2="20"/>
+                    <line x1="12" y1="4" x2="12" y2="20"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#191c1d] mb-1">Custom Branding</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">Laser engraving and private labeling tailored to your medical brand identity.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Center — featured card ── */}
+            <div className="bg-[#003b72] rounded-2xl p-8 lg:p-10 flex flex-col items-center justify-center text-center" style={{ boxShadow: "0 16px 48px rgba(0,59,114,0.20)" }}>
+              <p className="text-xs font-bold uppercase tracking-widest text-secondary-container mb-4">Why Choose Us</p>
+              <h2
+                id="why-us-heading"
+                className="font-headline text-2xl lg:text-3xl font-extrabold text-white leading-tight mb-4"
+              >
+                The Surgical Essence Advantage
+              </h2>
+              <p className="text-on-primary-container text-sm leading-relaxed mb-8 max-w-xs">
+                Heritage craftsmanship meets modern manufacturing — delivering unmatched reliability to hospitals and distributors worldwide.
+              </p>
+              <div className="grid grid-cols-2 gap-3 w-full">
+                {[
+                  ["500+",      "Products"],
+                  ["30+",       "Countries"],
+                  ["ISO 13485", "Certified"],
+                  ["CE Mark",   "Approved"],
+                ].map(([val, label]) => (
+                  <div key={label} className="bg-white/10 rounded-xl p-4 text-center">
+                    <p className="text-lg font-extrabold text-white">{val}</p>
+                    <p className="text-xs text-on-primary-container mt-0.5">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Right column ── */}
+            <div className="flex flex-col gap-4">
+              {/* Global Shipping */}
+              <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 flex-1" style={{ boxShadow: "0 4px 24px rgba(0,59,114,0.06)" }}>
+                <div className="w-12 h-12 rounded-xl bg-[#f0f7ff] flex items-center justify-center text-[#006a63] shrink-0">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#191c1d] mb-1">Global Shipping</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">Efficient logistics network reaching healthcare hubs across 30+ countries.</p>
+                </div>
+              </div>
+
+              {/* Bulk Pricing */}
+              <div className="bg-white rounded-2xl p-6 flex flex-col gap-4 flex-1" style={{ boxShadow: "0 4px 24px rgba(0,59,114,0.06)" }}>
+                <div className="w-12 h-12 rounded-xl bg-[#f0f7ff] flex items-center justify-center text-[#006a63] shrink-0">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#191c1d] mb-1">Bulk Pricing</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">Tiered pricing structures optimized for hospital procurement and distributors.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
@@ -351,7 +339,7 @@ export default async function HomePage() {
             </h2>
             <Link
               href="/products"
-              className="flex items-center gap-2 text-[#003b72] font-bold hover:text-[#00529b] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72] rounded"
+              className="flex items-center gap-2 text-[#003b72] font-bold hover:text-primary-container transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72] rounded"
             >
               View All
               <svg
@@ -405,7 +393,7 @@ export default async function HomePage() {
               className="bg-white border-b-4 border-transparent hover:border-[#006a63] transition-all rounded-xl overflow-hidden group"
               style={{ boxShadow: "0 16px 32px rgba(0,59,114,0.06)" }}
             >
-              <div className="relative aspect-[16/9] bg-slate-50 overflow-hidden">
+              <div className="relative aspect-video bg-slate-50 overflow-hidden">
                 <Image
                   src={image}
                   alt={title}
@@ -421,7 +409,7 @@ export default async function HomePage() {
                 <h3 className="text-base font-bold font-headline mt-1.5 text-[#191c1d]">
                   {title}
                 </h3>
-                <p className="text-[#424751] text-sm mt-2 leading-relaxed">
+                <p className="text-on-surface-variant text-sm mt-2 leading-relaxed">
                   {desc}
                 </p>
                 <div className="mt-4 flex items-center justify-between">
@@ -430,7 +418,7 @@ export default async function HomePage() {
                   </span>
                   <Link
                     href={href}
-                    className="inline-flex items-center gap-1.5 bg-[#003b72] text-white px-4 py-2 text-xs font-bold rounded hover:bg-[#00529b] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+                    className="inline-flex items-center gap-1.5 bg-[#003b72] text-white px-4 py-2 text-xs font-bold rounded hover:bg-primary-container transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
                   >
                     Add to Quote
                     <svg
@@ -463,7 +451,7 @@ export default async function HomePage() {
             <h2 className="font-headline text-4xl font-extrabold mb-6">
               Get a Quote Within 24 Hours
             </h2>
-            <p className="text-[#a5c7ff] text-lg leading-relaxed mb-8">
+            <p className="text-on-primary-container text-lg leading-relaxed mb-8">
               Ready to upgrade your clinical toolkit? Our specialists are on
               standby to provide custom pricing and technical consultation for
               your hospital or clinic.
@@ -472,7 +460,7 @@ export default async function HomePage() {
               {[
                 "Custom surgical sets tailored to your needs.",
                 "Global door-to-door delivery.",
-                "Bulk pricing for hospitals &amp; distributors.",
+                "Bulk pricing for hospitals & distributors.",
               ].map((item) => (
                 <li key={item} className="flex items-center gap-4">
                   <svg
@@ -490,7 +478,7 @@ export default async function HomePage() {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  <span dangerouslySetInnerHTML={{ __html: item }} />
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
@@ -503,12 +491,15 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ══ Newsletter ══════════════════════════════════════════════════════ */}
+      <NewsletterSection />
+
       {/* ══ Press Releases ══════════════════════════════════════════════════ */}
       {pressReleases.length > 0 && (
         <section aria-labelledby="press-heading" className="bg-[#f8f9fa]">
           <div className="max-w-screen-2xl mx-auto px-8 py-16 sm:py-20">
             <div className="text-center mb-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#00529b] mb-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary-container mb-2">
                 Latest News
               </p>
               <h2
@@ -525,7 +516,7 @@ export default async function HomePage() {
                 For more news, visit our{" "}
                 <Link
                   href="/press-releases"
-                  className="text-[#00529b] font-semibold hover:underline rounded"
+                  className="text-primary-container font-semibold hover:underline rounded"
                 >
                   Press Releases
                 </Link>{" "}
@@ -537,7 +528,7 @@ export default async function HomePage() {
                 <Link
                   key={item.id}
                   href={`/press-releases/${item.slug ?? item.id}`}
-                  className="group flex flex-col focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00529b] rounded-md"
+                  className="group flex flex-col focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-container rounded-md"
                 >
                   <div className="relative h-48 bg-slate-100 overflow-hidden rounded-md">
                     {item.imageUrl ? (
@@ -565,15 +556,15 @@ export default async function HomePage() {
                         </svg>
                       </div>
                     )}
-                    <span className="absolute bottom-3 left-3 inline-flex items-center px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wide bg-[#00529b] text-white shadow-sm">
+                    <span className="absolute bottom-3 left-3 inline-flex items-center px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wide bg-primary-container text-white shadow-sm">
                       Press Release
                     </span>
                   </div>
                   <div className="flex flex-col pt-4 gap-1.5">
-                    <h3 className="font-bold text-[#191c1d] text-[0.95rem] leading-snug group-hover:text-[#00529b] transition-colors line-clamp-2">
+                    <h3 className="font-bold text-[#191c1d] text-[0.95rem] leading-snug group-hover:text-primary-container transition-colors line-clamp-2">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+                    <p className="text-xs text-slate-600 font-medium flex items-center gap-1.5">
                       {formatDate(item.publishedAt)}
                       <span aria-hidden="true">·</span>
                       {readingTime(item.content)} min read

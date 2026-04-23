@@ -399,10 +399,12 @@ export default function AdminCategoriesPage() {
             <p className="text-xs text-gray-500">Admin panel</p>
           </div>
           <nav className="hidden sm:flex items-center gap-1 ml-4" aria-label="Admin navigation">
+            <Link href="/admin"                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Dashboard</Link>
             <Link href="/admin/products"       className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Products</Link>
+            <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">Categories</span>
             <Link href="/admin/press-releases" className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Press Releases</Link>
             <Link href="/admin/leads"          className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Leads</Link>
-            <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">Categories</span>
+            <Link href="/admin/quotes"         className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Quotes</Link>
           </nav>
         </div>
 

@@ -11,11 +11,10 @@ export default function WhatsAppButton() {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
-  // Show the bubble after 3 s, hide after 8 s (unless user dismissed it)
+  // Show bubble after 3 s; stays visible until user dismisses or clicks the button
   useEffect(() => {
     const show = setTimeout(() => setVisible(true), 3000);
-    const hide = setTimeout(() => setVisible(false), 8000);
-    return () => { clearTimeout(show); clearTimeout(hide); };
+    return () => clearTimeout(show);
   }, []);
 
   const dismiss = (e) => {

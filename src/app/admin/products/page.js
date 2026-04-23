@@ -71,28 +71,13 @@ export default function AdminProductsPage() {
             <h1 className="text-lg font-bold text-gray-900">Products</h1>
             <p className="text-xs text-gray-500">Admin panel</p>
           </div>
-          <nav className="hidden sm:flex items-center gap-1 ml-4">
-            <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">
-              Products
-            </span>
-            <Link
-              href="/admin/press-releases"
-              className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Press Releases
-            </Link>
-            <Link
-              href="/admin/leads"
-              className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Leads
-            </Link>
-            <Link
-              href="/admin/categories"
-              className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              Categories
-            </Link>
+          <nav className="hidden sm:flex items-center gap-1 ml-4" aria-label="Admin navigation">
+            <Link href="/admin"                className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Dashboard</Link>
+            <span className="px-3 py-1.5 text-sm font-semibold text-brand-primary bg-slate-50 rounded-lg">Products</span>
+            <Link href="/admin/categories"     className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Categories</Link>
+            <Link href="/admin/press-releases" className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Press Releases</Link>
+            <Link href="/admin/leads"          className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Leads</Link>
+            <Link href="/admin/quotes"         className="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg hover:bg-gray-100 transition-colors">Quotes</Link>
           </nav>
         </div>
 
@@ -162,6 +147,9 @@ export default function AdminProductsPage() {
                   <th scope="col" className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400 w-8">
                     <span className="sr-only">Status</span>
                   </th>
+                  <th scope="col" className="px-3 py-3 text-xs font-bold uppercase tracking-wide text-gray-400 w-14">
+                    <span className="sr-only">Image</span>
+                  </th>
                   <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400">Name</th>
                   <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400">SKU</th>
                   <th className="px-5 py-3 text-xs font-bold uppercase tracking-wide text-gray-400 hidden md:table-cell">Category</th>
@@ -178,6 +166,23 @@ export default function AdminProductsPage() {
                         aria-label={p.active ? "Active" : "Inactive"}
                         className={`inline-block w-2.5 h-2.5 rounded-full ${p.active ? "bg-green-500" : "bg-gray-300"}`}
                       />
+                    </td>
+                    <td className="px-3 py-3">
+                      {p.imageUrls?.[0] ? (
+                        <img
+                          src={p.imageUrls[0]}
+                          alt=""
+                          aria-hidden="true"
+                          className="w-11 h-11 rounded-lg object-cover bg-gray-100 shrink-0"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-11 h-11 rounded-lg bg-gray-100 flex items-center justify-center shrink-0" aria-hidden="true">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-300">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                          </svg>
+                        </div>
+                      )}
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">

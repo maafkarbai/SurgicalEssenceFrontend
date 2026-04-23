@@ -173,7 +173,7 @@ function ProductsDropdown({ onClose }) {
   return (
     <div
       id="products-dropdown"
-      role="region"
+      role="menu"
       aria-label="Product categories"
       className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 bg-surface-lowest rounded-md overflow-hidden animate-slide-down z-50 shadow-ambient"
     >
@@ -181,17 +181,19 @@ function ProductsDropdown({ onClose }) {
         href="/products"
         onClick={onClose}
         aria-label="View all surgical instruments"
+        role="menuitem"
         className="flex items-center justify-between px-4 py-2.5 bg-brand-primary text-white font-semibold text-sm hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-colors"
       >
         <span>All Instruments</span>
         <span className="text-white/70 text-xs">View all →</span>
       </Link>
-      <ul role="list" className="py-1.5">
+      <ul role="none" className="py-1.5">
         {CATEGORIES.map(({ href, label, desc, image }) => (
-          <li key={href}>
+          <li role="none" key={href}>
             <Link
               href={href}
               onClick={onClose}
+              role="menuitem"
               className="flex items-center gap-3 px-3 py-2 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors group"
             >
               {/* Instrument thumbnail */}
@@ -232,6 +234,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const dropdownRef = useRef(null);
   const userMenuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const menuTriggerRef = useRef(null);
 
   const { itemCount, setDrawerOpen } = useQuoteCart();
   const { user, loading: authLoading, openLogin, openRegister, logout } = useAuth();
@@ -245,6 +249,7 @@ const Navbar = () => {
     );
   };
 
+  // Global keyboard shortcuts (search, escape for dropdown)
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -269,6 +274,7 @@ const Navbar = () => {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  // Close products dropdown on outside click
   useEffect(() => {
     const onClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target))
@@ -278,6 +284,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // Close user menu on outside click
   useEffect(() => {
     const onClick = (e) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target))
@@ -286,6 +293,51 @@ const Navbar = () => {
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
+
+  // Focus management: move focus into menu on open, return to trigger on close
+  useEffect(() => {
+    if (menuOpen && mobileMenuRef.current) {
+      const firstFocusable = mobileMenuRef.current.querySelector("a, button");
+      firstFocusable?.focus();
+    } else if (!menuOpen && menuTriggerRef.current) {
+      if (mobileMenuRef.current?.contains(document.activeElement)) {
+        menuTriggerRef.current.focus();
+      }
+    }
+  }, [menuOpen]);
+
+  // Tab trap inside mobile menu
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleTab = (e) => {
+      if (e.key !== "Tab" || !mobileMenuRef.current) return;
+      const focusables = mobileMenuRef.current.querySelectorAll(
+        'a, button, input, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleTab);
+    return () => document.removeEventListener("keydown", handleTab);
+  }, [menuOpen]);
+
+  // Close mobile menu on Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleEscape = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [menuOpen]);
 
   return (
     <header className="w-full bg-surface-lowest fixed top-0 left-0 right-0 z-40 shadow-ambient-sm">
@@ -296,7 +348,7 @@ const Navbar = () => {
           <a
             href="tel:+923036029756"
             aria-label="Call us at +92 303 602 9756"
-            className="flex items-center gap-1.5 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
+            className="flex items-center gap-1.5 min-h-11 py-2 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
           >
             <PhoneIcon />
             +92 303 602 9756
@@ -309,7 +361,7 @@ const Navbar = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat with us on WhatsApp"
-              className="flex items-center gap-1.5 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
+              className="flex items-center gap-1.5 min-h-11 py-2 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
             >
               <WhatsAppIcon />
               WhatsApp
@@ -320,7 +372,7 @@ const Navbar = () => {
             <a
               href="mailto:info@surgicalessence.com"
               aria-label="Email info@surgicalessence.com"
-              className="flex items-center gap-1.5 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
+              className="flex items-center gap-1.5 min-h-11 py-2 text-white hover:text-white/80 text-xs font-medium transition-colors focus-visible:outline-1 focus-visible:outline-white"
             >
               <MailIcon />
               info@surgicalessence.com
@@ -361,12 +413,12 @@ const Navbar = () => {
 
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
-          {/* Cart button */}
+          {/* Cart button — Fix 6: w-10 h-10 → w-11 h-11 */}
           <button
             type="button"
             onClick={() => setDrawerOpen(true)}
             aria-label={`Open quote cart${itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? "s" : ""}` : ""}`}
-            className="relative flex items-center justify-center w-10 h-10 rounded border border-border text-text-body hover:text-brand-primary hover:border-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            className="relative flex items-center justify-center w-11 h-11 rounded border border-border text-text-body hover:text-brand-primary hover:border-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             <CartIcon />
             {itemCount > 0 && (
@@ -376,7 +428,7 @@ const Navbar = () => {
             )}
           </button>
 
-          {/* Auth */}
+          {/* Auth — Fix 6: h-10 → h-11 */}
           {!authLoading && (
             user ? (
               <div className="relative" ref={userMenuRef}>
@@ -385,7 +437,7 @@ const Navbar = () => {
                   onClick={() => setUserMenuOpen((v) => !v)}
                   aria-label="Account menu"
                   aria-expanded={userMenuOpen}
-                  className="flex items-center gap-2 px-2.5 h-10 rounded border border-border text-text-body hover:border-brand-primary hover:text-brand-primary transition-colors text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                  className="flex items-center gap-2 px-2.5 h-11 rounded border border-border text-text-body hover:border-brand-primary hover:text-brand-primary transition-colors text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
                 >
                   <span className="w-6 h-6 rounded-full bg-brand-primary text-white text-xs font-bold flex items-center justify-center shrink-0">
                     {user.name?.[0]?.toUpperCase() ?? user.email[0].toUpperCase()}
@@ -420,7 +472,7 @@ const Navbar = () => {
                 type="button"
                 onClick={openLogin}
                 aria-label="Sign in to your account"
-                className="flex items-center gap-1.5 px-3 h-10 rounded border border-border text-text-body hover:border-brand-primary hover:text-brand-primary transition-colors text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                className="flex items-center gap-1.5 px-3 h-11 rounded border border-border text-text-body hover:border-brand-primary hover:text-brand-primary transition-colors text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
               >
                 <UserIcon />
                 Sign In
@@ -437,14 +489,14 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile: cart + auth + search + hamburger */}
+        {/* Mobile: cart + auth + search + hamburger — Fix 6: w-9 h-9 → w-11 h-11 */}
         <div className="md:hidden flex items-center gap-1.5 ml-auto">
           {/* Mobile cart icon */}
           <button
             type="button"
             onClick={() => setDrawerOpen(true)}
             aria-label={`Open quote cart${itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? "s" : ""}` : ""}`}
-            className="relative flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            className="relative flex items-center justify-center w-11 h-11 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             <CartIcon />
             {itemCount > 0 && (
@@ -460,7 +512,7 @@ const Navbar = () => {
               <Link
                 href="/my-account"
                 aria-label="My account"
-                className="flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                className="flex items-center justify-center w-11 h-11 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
               >
                 <span className="w-5 h-5 rounded-full bg-brand-primary text-white text-[10px] font-bold flex items-center justify-center">
                   {user.name?.[0]?.toUpperCase() ?? user.email[0].toUpperCase()}
@@ -471,7 +523,7 @@ const Navbar = () => {
                 type="button"
                 onClick={openLogin}
                 aria-label="Sign in"
-                className="flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+                className="flex items-center justify-center w-11 h-11 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
               >
                 <UserIcon />
               </button>
@@ -482,16 +534,17 @@ const Navbar = () => {
             type="button"
             onClick={() => setSearchOpen((v) => !v)}
             aria-label="Search products"
-            className="flex items-center justify-center w-9 h-9 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            className="flex items-center justify-center w-11 h-11 rounded bg-surface-low text-text-muted hover:bg-brand-secondary hover:text-brand-primary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
           >
             <SearchIcon />
           </button>
+
+          {/* Hamburger — Fix 5: add ref; Fix 6: w-9 h-9 → w-11 h-11 */}
           <button
+            ref={menuTriggerRef}
             type="button"
-            className="flex items-center justify-center w-9 h-9 rounded text-gray-700 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
-            aria-label={
-              menuOpen ? "Close navigation menu" : "Open navigation menu"
-            }
+            className="flex items-center justify-center w-11 h-11 rounded text-gray-700 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             onClick={() => setMenuOpen((v) => !v)}
@@ -553,11 +606,12 @@ const Navbar = () => {
               >
                 {hasDropdown ? (
                   <>
+                    {/* Fix 8: aria-haspopup="true" → aria-haspopup="menu" */}
                     <button
                       type="button"
                       onClick={() => setDropdownOpen((v) => !v)}
                       onMouseEnter={() => setDropdownOpen(true)}
-                      aria-haspopup="true"
+                      aria-haspopup="menu"
                       aria-expanded={dropdownOpen}
                       aria-controls="products-dropdown"
                       aria-current={isActive(href) ? "page" : undefined}
@@ -594,9 +648,16 @@ const Navbar = () => {
       {/* ── Search modal ── */}
       {searchOpen && <SearchModal onClose={() => setSearchOpen(false)} />}
 
-      {/* ══ Mobile menu ════════════════════════════════════════════════════ */}
+      {/* ══ Mobile menu — Fix 5: role="dialog" + aria-modal + ref ═════════ */}
       {menuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-surface-lowest px-4 pb-5">
+        <div
+          id="mobile-menu"
+          ref={mobileMenuRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+          className="md:hidden bg-surface-lowest px-4 pb-5"
+        >
           {/* Nav links */}
           <ul className="flex flex-col gap-0.5 mt-3" role="list">
             {NAV_LINKS.map(({ href, label, hasDropdown }) => (

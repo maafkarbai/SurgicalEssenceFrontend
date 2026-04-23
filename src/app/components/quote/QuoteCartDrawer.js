@@ -219,6 +219,7 @@ export default function QuoteCartDrawer() {
   const { items, itemCount, drawerOpen, setDrawerOpen } = useQuoteCart();
   const [step, setStep] = useState("cart"); // "cart" | "form" | "success"
   const closeRef = useRef(null);
+  const panelRef = useRef(null);
 
   const close = () => {
     setDrawerOpen(false);
@@ -245,6 +246,29 @@ export default function QuoteCartDrawer() {
     if (drawerOpen) setTimeout(() => closeRef.current?.focus(), 50);
   }, [drawerOpen]);
 
+  // Tab trap within the drawer panel
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const handleTab = (e) => {
+      if (e.key !== "Tab" || !panelRef.current) return;
+      const focusables = panelRef.current.querySelectorAll(
+        'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleTab);
+    return () => document.removeEventListener("keydown", handleTab);
+  }, [drawerOpen]);
+
   return (
     <>
       {/* Backdrop */}
@@ -258,6 +282,7 @@ export default function QuoteCartDrawer() {
 
       {/* Panel */}
       <div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label="Quote cart"

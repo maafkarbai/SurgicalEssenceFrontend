@@ -105,7 +105,7 @@
   --color-text-heading:         #191c1d;   /* on_surface — headings (near-black warm)       */
   --color-text-body:            #3d4354;   /* on_surface_variant — body copy                */
   --color-text-muted:           #5f6578;   /* secondary / helper text                       */
-  --color-text-subtle:          #909aab;   /* placeholders, timestamps                      */
+  --color-text-subtle:          #6B7280;   /* placeholders, timestamps — WCAG AA 4.61:1    */
 
   /* ── Buttons ───────────────────────────────────────────────────────────── */
   --color-btn-primary-bg:       #00529B;
