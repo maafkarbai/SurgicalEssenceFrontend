@@ -39,7 +39,7 @@ const COUNTRIES = [
   "United Kingdom","United States","Uzbekistan","Vietnam","Yemen","Zimbabwe","Other",
 ];
 
-const inputCls = "w-full px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-[#003b72]/20 focus:border-[#003b72] transition";
+const inputCls = "w-full px-3 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition";
 
 // ─── Cart Item Row ────────────────────────────────────────────────────────────
 
@@ -85,7 +85,7 @@ function CartItemRow({ item }) {
         value={item.notes}
         onChange={(e) => updateNotes(item.productId, e.target.value)}
         placeholder="Add a note (size, grade, etc.)"
-        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-700 placeholder-gray-400 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-[#003b72]/20 focus:border-[#003b72] transition"
+        className="w-full px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-700 placeholder-gray-400 bg-gray-50 focus:outline-none focus:ring-1 focus:ring-brand-primary/20 focus:border-brand-primary transition"
       />
     </div>
   );
@@ -205,7 +205,7 @@ function QuoteForm({ onSuccess }) {
       </div>
 
       <button type="submit" disabled={loading}
-        className="w-full py-3 rounded-lg bg-[#003b72] hover:bg-[#00529b] text-white font-bold text-sm disabled:opacity-60 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]">
+        className="w-full btn-primary py-3 justify-center disabled:opacity-60">
         {loading ? "Sending…" : "Submit Quote Request"}
       </button>
       <p className="text-center text-xs text-gray-400">Our team responds within 24 hours.</p>
@@ -274,7 +274,7 @@ export default function QuoteCartDrawer() {
       {/* Backdrop */}
       {drawerOpen && (
         <div
-          className="fixed inset-0 z-[150] bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-150 bg-black/40 backdrop-blur-sm"
           onClick={close}
           aria-hidden="true"
         />
@@ -286,12 +286,12 @@ export default function QuoteCartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label="Quote cart"
-        className={`fixed top-0 right-0 z-[160] h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-160 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
           drawerOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-[#003b72]">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-brand-dark">
           <div className="flex items-center gap-2 text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
               strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -330,7 +330,7 @@ export default function QuoteCartDrawer() {
                 We've received your request and will respond with pricing within <strong>24 hours</strong>.
               </p>
               <button type="button" onClick={close}
-                className="mt-6 px-6 py-2.5 rounded-lg bg-[#003b72] text-white font-bold text-sm hover:bg-[#00529b] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]">
+                className="mt-6 btn-primary px-6 py-2.5">
                 Close
               </button>
             </div>
@@ -376,7 +376,7 @@ export default function QuoteCartDrawer() {
               <span className="text-sm text-gray-500">{itemCount} item{itemCount !== 1 ? "s" : ""} in cart</span>
             </div>
             <button type="button" onClick={() => setStep("form")}
-              className="w-full py-3 rounded-lg bg-[#003b72] hover:bg-[#00529b] text-white font-bold text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]">
+              className="w-full btn-primary py-3 justify-center">
               Proceed to Submit Quote →
             </button>
           </div>
@@ -386,7 +386,7 @@ export default function QuoteCartDrawer() {
         {step === "form" && (
           <div className="px-5 py-3 border-t border-gray-100">
             <button type="button" onClick={() => setStep("cart")}
-              className="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72] rounded">
+              className="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded">
               ← Back to cart
             </button>
           </div>

@@ -97,14 +97,14 @@ export default function MyAccountPage() {
           <button
             type="button"
             onClick={openLogin}
-            className="px-6 py-2.5 rounded-lg border border-[#003b72] text-[#003b72] font-semibold text-sm hover:bg-blue-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+            className="btn-outline px-6 py-2.5 text-sm"
           >
             Sign In
           </button>
           <button
             type="button"
             onClick={openRegister}
-            className="px-6 py-2.5 rounded-lg bg-[#003b72] text-white font-semibold text-sm hover:bg-[#00529b] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+            className="btn-primary px-6 py-2.5 text-sm"
           >
             Create Account
           </button>
@@ -190,7 +190,7 @@ export default function MyAccountPage() {
             </p>
             <Link
               href="/products"
-              className="inline-block px-5 py-2 rounded-lg bg-[#003b72] text-white text-sm font-semibold hover:bg-[#00529b] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+              className="btn-primary px-5 py-2 text-sm"
             >
               Browse Products
             </Link>

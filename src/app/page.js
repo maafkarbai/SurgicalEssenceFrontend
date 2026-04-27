@@ -106,13 +106,13 @@ export default async function HomePage() {
           <div className="flex flex-wrap gap-4 pt-2">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center bg-[#003b72] text-white px-6 py-3 font-bold rounded hover:bg-primary-container transition-all shadow-lg shadow-[#003b72]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+              className="btn-primary px-6 py-3 text-base justify-center"
             >
               Get a Quote
             </Link>
             <Link
               href="/catalog"
-              className="inline-flex items-center justify-center border-2 border-[#003b72] text-[#003b72] px-6 py-3 font-bold rounded hover:bg-[#f3f4f5] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#003b72]"
+              className="btn-outline px-6 py-3 text-base justify-center"
             >
               Download Catalog
             </Link>

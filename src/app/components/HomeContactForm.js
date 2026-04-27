@@ -127,7 +127,7 @@ export default function HomeContactForm() {
         type="submit"
         disabled={status === "loading"}
         aria-busy={status === "loading"}
-        className="w-full bg-[#006a63] text-white py-4 font-bold rounded hover:bg-[#00504b] transition-colors shadow-lg disabled:opacity-60"
+        className="w-full btn-primary py-4 justify-center disabled:opacity-60"
       >
         {status === "loading" ? "Sending…" : "Submit Quote Request"}
       </button>

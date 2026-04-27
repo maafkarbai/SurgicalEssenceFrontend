@@ -31,14 +31,13 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/products"
-            className="inline-flex items-center justify-center px-6 py-3 rounded font-bold text-white text-sm shadow-ambient-sm hover:opacity-90 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
-            style={{ background: "linear-gradient(135deg, #003b72, #00529B)" }}
+            className="btn-primary px-6 py-3 justify-center"
           >
             Browse Products
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded border-2 border-[#003b72] text-brand-primary font-bold text-sm hover:bg-brand-secondary transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            className="btn-outline px-6 py-3 justify-center"
           >
             Go Home
           </Link>

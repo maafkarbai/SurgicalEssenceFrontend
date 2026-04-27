@@ -18,8 +18,7 @@ export default function FloatingQuoteButton() {
       type="button"
       onClick={() => setDrawerOpen(true)}
       aria-label={`Open quote cart${itemCount > 0 ? `, ${itemCount} item${itemCount !== 1 ? "s" : ""}` : ""}`}
-      style={{ backgroundColor: "#00529B" }}
-      className={`fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 px-5 py-3 rounded text-white text-sm font-bold transition-all duration-300 hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary shadow-ambient ${
+      className={`fixed bottom-6 left-6 z-50 inline-flex items-center gap-2 px-5 py-3 rounded bg-brand-primary text-white text-sm font-bold transition-all duration-300 hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary shadow-ambient ${
         visible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-4 pointer-events-none"
