@@ -165,6 +165,32 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ══ Certification Strip ════════════════════════════════════════════ */}
+      <div className="bg-[#f5f6f7] border-b border-[#ecedef] py-3.5">
+        <div className="max-w-7xl mx-auto px-8 flex flex-wrap gap-x-8 gap-y-3 items-center justify-center">
+          {[
+            { code: "ISO 13485:2016", desc: "Medical Device QMS" },
+            { code: "ISO 9001:2015",  desc: "Quality Management" },
+            { code: "CE Mark",        desc: "European Conformity" },
+            { code: "FDA Registered", desc: "US FDA Establishment" },
+            { code: "WHO GMP",        desc: "Good Manufacturing Practice" },
+            { code: "CDSCO",          desc: "Indian Regulatory Approval" },
+          ].map(({ code, desc }) => (
+            <div key={code} className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-[#e8f4fc] border border-[#9ccbee] flex items-center justify-center shrink-0">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#1677b5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-[#232528]">{code}</span>
+                <span className="text-[11px] text-[#8c9098] ml-1.5">{desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ══ Product Categories ══════════════════════════════════════════════ */}
       <section className="max-w-screen-2xl mx-auto px-8 py-16">
         <div className="mb-8">

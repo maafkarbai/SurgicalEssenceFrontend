@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <Image
-            src="/images/logo/SurgicalEssenceLogo.png"
+            src="/images/logo/SurgicalEssenceLogo.svg"
             alt="Surgical Essence"
             width={160}
             height={60}

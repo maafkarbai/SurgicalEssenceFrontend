@@ -34,7 +34,7 @@ export default function LoadingScreen() {
       <div className="flex flex-col items-center gap-6 animate-fade-in-up">
         {/* Logo */}
         <Image
-          src="/images/logo/SurgicalEssenceLogo.png"
+          src="/images/logo/SurgicalEssenceLogo.svg"
           alt="Surgical Essence"
           width={280}
           height={112}

@@ -390,7 +390,7 @@ const Navbar = () => {
           className="flex items-center shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary rounded"
         >
           <Image
-            src="/images/logo/SurgicalEssenceLogo.png"
+            src="/images/logo/SurgicalEssenceLogo.svg"
             alt="Surgical Essence"
             width={220}
             height={88}
