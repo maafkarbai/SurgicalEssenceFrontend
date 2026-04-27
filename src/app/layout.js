@@ -28,7 +28,7 @@ export const metadata = {
     template: "%s | Surgical Essence",
   },
   description:
-    "Surgical Essence is an international surgical instruments manufacturer and a wholesale supplier, providing high-quality surgical instruments, medical devices, and hospital equipment to healthcare professionals worldwide. We specialize in precision surgical tools, including general surgery instruments, orthopedic instruments, dental instruments, gynecology instruments, and sterilization equipment. Our products are designed to meet the needs of surgeons, hospitals, clinics, and medical distributors, ensuring accuracy, reliability, and durability in every instrument. As a trusted wholesale surgical instruments supplier and OEM manufacturer, we offer bulk supply, custom branding, and ISO-standard medical instruments for global healthcare markets.",
+    "Surgical Essence is an international surgical instruments manufacturer and supplier, providing high-quality surgical instruments, medical devices, and hospital equipment to healthcare professionals worldwide. We specialize in precision surgical tools, including general surgery instruments, orthopedic instruments, dental instruments, gynecology instruments, and sterilization equipment. Our products are designed to meet the needs of surgeons, hospitals, clinics, and medical distributors, ensuring accuracy, reliability, and durability in every instrument. As a trusted wholesale surgical instruments supplier and OEM manufacturer, we offer bulk supply, custom branding, and ISO-standard medical instruments for global healthcare markets.",
   openGraph: {
     siteName: "Surgical Essence",
     type: "website",
