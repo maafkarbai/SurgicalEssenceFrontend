@@ -8,6 +8,7 @@ import {fileURLToPath} from 'node:url';
 import {categories,products,searchProducts} from './catalogue.js';
 import {buyerTypes,validateRfq} from './rfq.js';
 import {openStore,saveRfq} from './store.js';
+import {createPostgresStore} from './postgres-store.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const routes={
@@ -21,13 +22,21 @@ const routes={
  '/privacy':['Privacy','Enquiry Privacy Notice | Surgical Essence','How Surgical Essence handles contact information, quotation requirements and local quote-list storage.']
 };
 export function createApp(options={}) {
- const app=express(),siteUrl=(options.siteUrl||process.env.SITE_URL||'http://localhost:3000').replace(/\/$/,'');
+ const app=express(),siteUrl=(options.siteUrl||process.env.SITE_URL||(process.env.VERCEL_PROJECT_PRODUCTION_URL?'https://'+process.env.VERCEL_PROJECT_PRODUCTION_URL:'http://localhost:3000')).replace(/\/$/,'');
  const production=process.env.NODE_ENV==='production';
  if(production&&!siteUrl.startsWith('https://'))throw new Error('Production SITE_URL must use HTTPS.');
  const dataDir=resolve(options.dataDir||process.env.DATA_DIR||join(root,'data'));
- const db=openStore(dataDir),secretFile=join(dataDir,'csrf.secret');
- if(!existsSync(secretFile))writeFileSync(secretFile,randomBytes(32).toString('hex'),{mode:0o600,flag:'wx'});
- const secret=readFileSync(secretFile,'utf8');
+ const cloud=Boolean(process.env.VERCEL)&&!options.dataDir;
+ const databaseUrl=/^postgres(ql)?:/.test(process.env.DATABASE_URL||'')?process.env.DATABASE_URL:process.env.DIRECT_URL;
+ const db=options.store||(cloud?createPostgresStore(databaseUrl):openStore(dataDir)),secretFile=join(dataDir,'csrf.secret');
+ let secret;
+ if(cloud){
+  if(!process.env.CSRF_SECRET&&!databaseUrl)throw new Error('Configure DATABASE_URL and CSRF_SECRET for Vercel.');
+  secret=process.env.CSRF_SECRET||createHash('sha256').update('se-csrf:'+databaseUrl).digest('hex');
+ }else{
+  if(!existsSync(secretFile))writeFileSync(secretFile,randomBytes(32).toString('hex'),{mode:0o600,flag:'wx'});
+  secret=readFileSync(secretFile,'utf8');
+ }
  app.disable('x-powered-by');app.set('trust proxy',Number(process.env.TRUST_PROXY_HOPS||0));
  app.set('view engine','ejs');app.set('views',join(root,'views'));
  app.use(helmet({referrerPolicy:{policy:'strict-origin-when-cross-origin'},contentSecurityPolicy:{directives:{defaultSrc:["'self'"],scriptSrc:["'self'"],styleSrc:["'self'"],imgSrc:["'self'",'data:'],fontSrc:["'self'"],formAction:["'self'"],upgradeInsecureRequests:production?[]:null}},strictTransportSecurity:production?undefined:false}));
@@ -65,19 +74,25 @@ export function createApp(options={}) {
  app.get('/request-quote',(req,res)=>render(req,res,'rfq',{noindex:true,values:{oem:req.query.intent==='oem'?'Please discuss private-label requirements.':'',products:req.query.intent==='documentation'?'Quality documentation enquiry':req.query.intent==='catalogue'?'Catalogue enquiry':''}}));
  // Memory burst limiter plus durable hourly limit. IP is HMAC-hashed, not logged.
  const limiter=rateLimit({windowMs:60000,limit:options.rateLimit||10,standardHeaders:'draft-8',legacyHeaders:false,handler:(req,res)=>render(req,res,'message',{heading:'Please wait a moment',message:'Too many requests were received. Please try again in a minute or email info@surgicalessence.com.',noindex:true},429)});
- app.post('/request-quote',limiter,(req,res)=>{
+ app.post('/request-quote',limiter,async(req,res)=>{
   const json=req.get('Accept')?.includes('application/json');
   const fail=(status,message,errors={})=>json?res.status(status).json({ok:false,message,errors}):render(req,res,'rfq',{errors:{...errors,...(Object.keys(errors).length?{}:{form:message})},values:req.body||{},requestId:typeof req.body?.requestId==='string'?req.body.requestId:randomUUID(),noindex:true},status);
   const body=req.body||{};
-  if(!validToken(req.csrfCookie)||body._csrf!==req.csrfCookie||(req.get('Origin')&&req.get('Origin')!==new URL(siteUrl).origin))return fail(403,'Your form session expired. Reload this page and try again.');
+  const origins=[new URL(siteUrl).origin,...(process.env.VERCEL_URL?['https://'+process.env.VERCEL_URL]:[])];
+  if(!validToken(req.csrfCookie)||body._csrf!==req.csrfCookie||(req.get('Origin')&&!origins.includes(req.get('Origin'))))return fail(403,'Your form session expired. Reload this page and try again.');
   try {
    const ip=createHmac('sha256',secret).update(req.ip||'unknown').digest('hex');
+   let count;
+   if(db.limit)count=await db.limit(ip);
+   else{
    db.prepare('DELETE FROM rate_limits WHERE expires < ?').run(Date.now());
    db.prepare('INSERT INTO rate_limits(ip_hash,count,expires) VALUES(?,1,?) ON CONFLICT(ip_hash) DO UPDATE SET count=count+1').run(ip,Date.now()+3600000);
-   if(db.prepare('SELECT count FROM rate_limits WHERE ip_hash=?').get(ip).count>(options.rateLimit||20))return fail(429,'Hourly enquiry limit reached. Please try again later or email our team.');
+   count=db.prepare('SELECT count FROM rate_limits WHERE ip_hash=?').get(ip).count;
+   }
+   if(count>(options.rateLimit||20))return fail(429,'Hourly enquiry limit reached. Please try again later or email our team.');
    const result=validateRfq(body);
    if(result.errors)return fail(422,'Please review the highlighted fields.',result.errors);
-   const saved=saveRfq(db,result.data);
+   const saved=db.save?await db.save(result.data):saveRfq(db,result.data);
    if(json)return res.status(saved.duplicate?200:201).json({ok:true,...saved});
    return render(req,res,'success',{reference:saved.reference,noindex:true},saved.duplicate?200:201);
   } catch(e){
