@@ -97,7 +97,7 @@ export function createApp(options={}) {
    return render(req,res,'success',{reference:saved.reference,noindex:true},saved.duplicate?200:201);
   } catch(e){
    if(e.code==='CONFLICT')return fail(409,'This request was already submitted with different details. Reload the form to start a new enquiry.');
-   console.error(JSON.stringify({event:'rfq_storage_failed'}));return fail(503,'Your request could not be saved. Please try again or email info@surgicalessence.com.');
+   console.error(JSON.stringify({event:'rfq_storage_failed',code:typeof e.code==='string'?e.code:'unknown'}));return fail(503,'Your request could not be saved. Please try again or email info@surgicalessence.com.');
   }
  });
  const redirects={'/contact':'/request-quote','/catalog':'/products','/catalogue':'/products','/quality-control':'/quality','/certifications':'/quality','/distributor':'/request-quote','/distributors':'/oem-private-label','/privacy-policy':'/privacy','/sitemap':'/sitemap.xml'};
