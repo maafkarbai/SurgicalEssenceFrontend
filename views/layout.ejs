@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+ <title><%= title %></title><meta name="description" content="<%= description %>">
+ <link rel="canonical" href="<%= canonical %>"><% if(noindex){ %><meta name="robots" content="noindex, follow"><% } %>
+ <meta property="og:title" content="<%= title %>"><meta property="og:description" content="<%= description %>"><meta property="og:type" content="website"><meta property="og:url" content="<%= canonical %>"><meta property="og:image" content="<%= siteUrl %>/images/optimized/surgical-960.webp"><meta property="og:site_name" content="Surgical Essence">
+ <meta name="theme-color" content="#0068B7"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
+ <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body>
+ <a class="skip-link" href="#main">Skip to content</a>
+ <div class="utility"><div class="container"><span>Surgical instrument sourcing · Sialkot, Pakistan</span><a href="mailto:info@surgicalessence.com">info@surgicalessence.com <span aria-hidden="true">↗</span></a></div></div>
+ <header class="header"><div class="container header-inner">
+  <a href="/" class="brand" aria-label="Surgical Essence home"><img src="/images/logo/SurgicalEssenceLogo.svg" alt="Surgical Essence" width="205" height="55"></a>
+  <button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">☰</span></button>
+  <nav id="navigation" aria-label="Main navigation">
+   <% for(const [href,text] of [['/products','Instruments'],['/oem-private-label','OEM & private label'],['/quality','Quality'],['/about','About us']]){ %><a href="<%= href %>" <%- path.startsWith(href)?'aria-current="page"':'' %>><%= text %></a><% } %>
+   <a class="quote-nav" href="/quote-list">Quote list <span data-quote-count>0</span></a><a class="button small" href="/request-quote">Request a quote <span aria-hidden="true">↗</span></a>
+  </nav>
+ </div></header>
+ <noscript><nav class="container nojs-nav" aria-label="Navigation without JavaScript"><a href="/products">Instruments</a> · <a href="/oem-private-label">OEM & private label</a> · <a href="/quality">Quality</a> · <a href="/about">About us</a> · <a href="/request-quote">Request a quote</a></nav></noscript>
+ <main id="main"><% if(path!=='/'){ %><div class="container breadcrumbs"><nav aria-label="Breadcrumb"><ol itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="/"><span itemprop="name">Home</span></a><meta itemprop="position" content="1"></li><% if(typeof product!=='undefined'){ %><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="/products"><span itemprop="name">Instruments</span></a><meta itemprop="position" content="2"></li><% } %><li aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name"><%= label %></span><meta itemprop="position" content="<%= typeof product!=='undefined'?3:2 %>"></li></ol></nav></div><% } %><%- include(view) %></main>
+ <footer class="footer"><div class="container footer-main">
+  <div class="footer-brand"><a href="/" aria-label="Surgical Essence home"><img src="/images/logo/SurgicalEssenceLogoWhiteDARKBG.svg" alt="Surgical Essence" width="205" height="55" loading="lazy"></a><p>Surgical instruments.<br> Professional sourcing.<br> Direct business conversations.</p><span>Based in Sialkot, Pakistan.</span></div>
+  <div><h2>Explore</h2><a href="/products">Instrument catalogue</a><a href="/oem-private-label">OEM & private label</a><a href="/quality">Quality & documentation</a><a href="/about">About Surgical Essence</a></div>
+  <div><h2>For buyers</h2><a href="/request-quote">Request a quotation</a><a href="/quote-list">Your quote list</a><a href="/products#catalogues">Download catalogues</a><a href="/request-quote?intent=documentation">Request documentation</a></div>
+  <div itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="Surgical Essence"><h2>Talk to our team</h2><a itemprop="email" href="mailto:info@surgicalessence.com">info@surgicalessence.com</a><a itemprop="telephone" href="tel:+923036029756">+92 303 602 9756</a><p itemprop="address">Industrial Estate, Sialkot<br> Punjab, Pakistan 51310</p></div>
+ </div><div class="container footer-bottom"><span>© <%= new Date().getFullYear() %> Surgical Essence</span><div><a href="/privacy">Privacy notice</a><a href="/sitemap.xml">Sitemap</a></div></div></footer>
+ <div id="announcement" class="toast" role="status" aria-live="polite"></div>
+</body></html>

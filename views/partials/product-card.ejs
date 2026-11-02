@@ -1,0 +1,4 @@
+<article class="product-card">
+ <a class="product-image" href="/products/<%= p.code %>" aria-label="View <%= p.name %>, <%= p.code %>"><img src="<%= p.image %>" alt="Catalogue illustration of <%= p.name %>, pattern <%= p.pattern %>" width="280" height="280" loading="lazy"></a>
+ <div class="product-content"><span class="product-type"><%= p.type %> · <%= p.length %></span><h3><a href="/products/<%= p.code %>"><%= p.name %></a></h3><code><%= p.code %></code><div class="product-actions"><a href="/products/<%= p.code %>">View details <span aria-hidden="true">↗</span></a><button class="add-button" data-add="<%= p.code %>" data-name="<%= p.name %>" aria-label="Add <%= p.name %>, <%= p.code %> to quote list">+ Quote list</button></div></div>
+</article>
