@@ -2,6 +2,18 @@
 
 A working, server-rendered B2B instrument catalogue and quotation site. Built from the supplied asset-only workspace using Express, EJS, browser JavaScript and SQLite. No frontend compilation step or external database service is required.
 
+## Vercel deployment
+
+The repository now includes a Vercel Node API entry point (`api/index.js`) and routing configuration. The linked project is `surgicalessencefrontend` under `abdullafarooqs-projects`; use framework **Other**, Node **24.x**, install `npm ci`, and no build/output override. Static assets are served from `public/`, and EJS templates are explicitly bundled.
+
+On Vercel, the backend uses the existing PostgreSQL connection in `DATABASE_URL` (or `DIRECT_URL` when the former is not a PostgreSQL URL). It creates only `se_rfqs` and `se_rate_limits` and an index; it does not alter the previous application tables. No local SQLite file is used in the cloud. `SITE_URL` is the public deployment origin, `TRUST_PROXY_HOPS=1` applies to the Vercel edge proxy, and an optional `CSRF_SECRET` can override the database-credential-derived server secret.
+
+Review cloud enquiries through the database provider’s private SQL console: `SELECT id, created_at, payload, notification_status FROM se_rfqs ORDER BY created_at DESC;`. Restrict access because payloads contain buyer contact details. The local CLI below reads SQLite only.
+
+The long-running SQLite SMTP worker is disabled on Vercel. Cloud requests persist, but email alerts require a separately configured scheduled/outbox worker; SMTP credentials alone do not enable that worker. No email delivery is currently claimed.
+
+The deployment instructions below describe the alternative long-running Node/SQLite hosting path.
+
 ## Run locally
 
 Requires Node.js **22.14 or newer** (tested with 22.14.0) and npm. Node 22 currently prints an experimental warning for its built-in SQLite API.
@@ -51,7 +63,7 @@ Without SMTP settings, submissions still persist, and must be reviewed with the 
 
 ## Deployment
 
-No production deployment has been performed or authorised.
+For deployment on a long-running Node host (the Vercel path is documented above):
 
 1. Use a maintained Node runtime supporting `node:sqlite`, a long-running application process and persistent local disk. This is not a PHP app and is not suitable for an ephemeral serverless filesystem. For cPanel, the host must support Node applications; otherwise choose a Node-capable host.
 2. Run `npm ci --omit=dev`; there is no build step. Use `server.js` as the entry point and set the host's `PORT`.
