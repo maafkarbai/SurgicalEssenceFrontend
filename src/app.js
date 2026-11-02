@@ -78,7 +78,7 @@ export function createApp(options={}) {
   const json=req.get('Accept')?.includes('application/json');
   const fail=(status,message,errors={})=>json?res.status(status).json({ok:false,message,errors}):render(req,res,'rfq',{errors:{...errors,...(Object.keys(errors).length?{}:{form:message})},values:req.body||{},requestId:typeof req.body?.requestId==='string'?req.body.requestId:randomUUID(),noindex:true},status);
   const body=req.body||{};
-  const origins=[new URL(siteUrl).origin,...(process.env.VERCEL_URL?['https://'+process.env.VERCEL_URL]:[])];
+  const origins=[new URL(siteUrl).origin,...[process.env.VERCEL_URL,process.env.VERCEL_PROJECT_PRODUCTION_URL].filter(Boolean).map(host=>'https://'+host)];
   if(!validToken(req.csrfCookie)||body._csrf!==req.csrfCookie||(req.get('Origin')&&!origins.includes(req.get('Origin'))))return fail(403,'Your form session expired. Reload this page and try again.');
   try {
    const ip=createHmac('sha256',secret).update(req.ip||'unknown').digest('hex');
