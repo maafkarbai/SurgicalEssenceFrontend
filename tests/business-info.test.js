@@ -50,3 +50,14 @@ test('catalogue startup failure keeps the central contact available and escapes 
  assert.match(failed.text,/support@example.com&lt;script&gt;/);
  assert.doesNotMatch(failed.text,/<script>/);
 });
+
+test('catalogue startup failures log a diagnostic code without connection secrets',async t=>{
+ const {app,cms}=setup(t),records=[],original=console.error;
+ console.error=value=>records.push(String(value));
+ try{
+  cms.ready=async()=>{throw Object.assign(new Error('private database connection details'),{code:'42P01'});};
+  assert.equal((await request(app).get('/products')).status,503);
+  assert.ok(records.some(record=>JSON.parse(record).event==='catalogue_startup_failed'&&JSON.parse(record).code==='42P01'));
+  assert.doesNotMatch(records.join(' '),/private database connection details/);
+ }finally{console.error=original;}
+});
