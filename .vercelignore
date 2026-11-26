@@ -4,3 +4,11 @@ test-results
 .repo-sync
 .repo-publish
 .env
+tmp
+output
+docs/superpowers
+*.zip
+Sample Creds.txt
+.env.*
+tests
+assets
