@@ -43,6 +43,7 @@ try {
  await page.keyboard.press('Tab');report.journeys.push('Mobile menu opens and Escape restores focus');
  await page.goto(base+'/products');await page.getByLabel('Search by instrument or reference').fill('003-004-00');await page.getByRole('button',{name:'Search',exact:true}).click();assert.equal(await page.locator('.product-card').count(),1);
  await page.getByRole('button',{name:'Add Scalpel handle No. 4, 003-004-00 to quote list'}).click();await page.reload();assert.equal(await page.locator('[data-quote-count]').textContent(),'1');
+ assert.match(await page.locator('[data-add="003-004-00"] use').getAttribute('href'),/#se-confirmed$/,'added-state icon survives reload');
  await page.goto(base+'/products?category=dental');assert.ok(await page.getByRole('heading',{name:'No online records in this range yet.'}).isVisible());
  await page.goto(base+'/products?type=Scissors');assert.equal(await page.locator('.product-card').count(),4);
  await page.locator('[data-add]').first().click();

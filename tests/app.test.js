@@ -25,8 +25,8 @@ test('search and categories return accurate results, invalid detail is 404',asyn
 test('sitemap, robots, legacy redirects and security headers',async()=>{
  assert.match((await request(app).get('/sitemap.xml')).text,/products\/003-004-00/);
  assert.match((await request(app).get('/robots.txt')).text,/Sitemap:/);
- assert.equal((await request(app).get('/contact')).status,301);
- assert.equal((await request(app).get('/distributor')).headers.location,'/request-quote');
+ assert.equal((await request(app).get('/contact')).status,200);
+ assert.equal((await request(app).get('/distributor')).status,200);
  assert.equal((await request(app).get('/products?cat=dental')).headers.location,'/products?category=dental');
  assert.match((await request(app).get('/')).headers['content-security-policy'],/default-src 'self'/);
 });

@@ -1,0 +1,1 @@
+<article class="container section"><h1><%= item.title %></h1><time datetime="<%= new Date(item.publishedAt).toISOString() %>"><%= new Date(item.publishedAt).toISOString().slice(0,10) %></time><% for(const paragraph of item.content.split(/\r?\n/).filter(Boolean)){ %><p><%= paragraph %></p><% } %><p><a href="/press-releases">All press releases</a></p></article>

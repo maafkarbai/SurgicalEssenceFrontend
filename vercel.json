@@ -1,6 +1,6 @@
 {
  "$schema":"https://openapi.vercel.sh/vercel.json",
  "framework":null,
- "functions":{"api/index.js":{"includeFiles":"views/**","maxDuration":30}},
+ "functions":{"api/index.js":{"includeFiles":"{views/**,src/cms/schema.sql}","maxDuration":30}},
  "routes":[{"handle":"filesystem"},{"src":"/(.*)","dest":"/api/index.js"}]
 }

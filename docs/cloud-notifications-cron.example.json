@@ -1,0 +1,5 @@
+{
+  "crons": [
+    {"path": "/internal/rfq-notifications", "schedule": "*/5 * * * *"}
+  ]
+}

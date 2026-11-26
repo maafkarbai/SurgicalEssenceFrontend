@@ -15,7 +15,7 @@ export const products = [
  ['010-072-13','Grazil dissecting scissors','Scissors','13.0 cm',18,'010-072'],
  ['010-073-13','Grazil dissecting scissors','Scissors','13.0 cm',18,'010-073']
 ].map(([code,name,type,length,page,pattern])=>({code,name,type,length,page,pattern,category:'surgical',image:`/images/optimized/${code}.webp`}));
-export function searchProducts(query='',category='',type='') {
+export function searchProducts(query='',category='',type='',records=products) {
  const terms=query.toLowerCase().trim().split(/\s+/);
- return products.filter(p=>(!category||p.category===category)&&(!type||p.type===type)&&terms.every(t=>`${p.name} ${p.code} ${p.type} ${p.pattern}`.toLowerCase().includes(t)));
+ return records.filter(p=>(!category||p.category===category)&&(!type||p.type===type)&&terms.every(t=>`${p.name} ${p.code} ${p.type} ${p.pattern}`.toLowerCase().includes(t)));
 }

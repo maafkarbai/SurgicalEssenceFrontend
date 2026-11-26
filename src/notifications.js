@@ -1,8 +1,11 @@
 import nodemailer from 'nodemailer';
+export function createNotificationTransport(env=process.env,options={}){
+ return nodemailer.createTransport({host:env.SMTP_HOST,port:Number(env.SMTP_PORT||587),secure:env.SMTP_SECURE==='true',requireTLS:env.SMTP_SECURE!=='true',auth:env.SMTP_USER?{user:env.SMTP_USER,pass:env.SMTP_PASS}:undefined,connectionTimeout:10000,socketTimeout:15000,disableFileAccess:true,disableUrlAccess:true,...options});
+}
 // Durable outbox: submissions are accepted on storage, never on presumed email delivery.
 export function startNotifications(db) {
  if(!process.env.SMTP_HOST || !process.env.RFQ_FROM || !process.env.RFQ_TO) return ()=>{};
- const transport=nodemailer.createTransport({host:process.env.SMTP_HOST,port:Number(process.env.SMTP_PORT||587),secure:process.env.SMTP_SECURE==='true',requireTLS:process.env.SMTP_SECURE!=='true',auth:process.env.SMTP_USER?{user:process.env.SMTP_USER,pass:process.env.SMTP_PASS}:undefined,connectionTimeout:10000,socketTimeout:15000});
+ const transport=createNotificationTransport();
  let active=false;
  async function flush(){
   if(active)return;active=true;

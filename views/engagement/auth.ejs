@@ -1,0 +1,9 @@
+<section class="container section"><h1><%= mode==='register'?'Create a buyer account':'Buyer sign in' %></h1><p>Save new quotation requests to your account. Requests submitted before signing in remain private and are not linked by email.</p>
+<% if(error){ %><p role="alert"><%= error %></p><% } %>
+<form method="post" action="/account/<%= mode %>"><input type="hidden" name="_csrf" value="<%= csrf %>">
+<% if(mode==='register'){ %><p><label>Full name <input name="name" autocomplete="name" required maxlength="150"></label></p><% } %>
+<p><label>Email <input type="email" name="email" autocomplete="email" required maxlength="254"></label></p>
+<p><label>Password <input type="password" name="password" autocomplete="<%= mode==='register'?'new-password':'current-password' %>" required <%- mode==='register'?'minlength="12"':'' %> maxlength="256"></label></p>
+<% if(mode==='register'){ %><p>Use 12–256 characters. Your email is used for this buyer account and your enquiries.</p><% } %>
+<button class="button" type="submit"><%= mode==='register'?'Create account':'Sign in' %></button></form>
+<p><a href="/account/<%= mode==='register'?'login':'register' %>"><%= mode==='register'?'Already have an account? Sign in':'Create a buyer account' %></a></p><p><a href="/privacy">Privacy notice</a></p></section>

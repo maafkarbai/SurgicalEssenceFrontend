@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {products} from './catalogue.js';
 const text=(max)=>z.string().trim().max(max);
 export const buyerTypes=['Distributor','Importer / wholesaler','OEM / private-label brand','Procurement manager','Sourcing company','Other business'];
 const schema=z.object({
@@ -7,7 +6,9 @@ const schema=z.object({
  email:text(254).email('Enter a valid business email.'),country:text(100).min(2,'Enter your country.'),
  buyerType:z.enum(buyerTypes,{error:'Select your buyer type.'}),products:text(5000).default(''),quantities:text(1000).default(''),
  oem:text(3000).default(''),message:text(8000).default(''),website:text(0).default(''),
- requestId:z.uuid().optional(),items:z.array(z.object({code:z.string().refine(c=>products.some(p=>p.code===c),'Unknown instrument.'),quantity:z.number().int().min(1).max(1000000).nullable()})).max(50).default([])
+ intent:z.enum(['quote','distributor','catalogue','documentation','oem','contact']).optional(),
+ territory:text(300).optional(),purchasing:text(1000).optional(),interests:text(1000).optional(),
+ requestId:z.uuid().optional(),items:z.array(z.object({code:z.string().min(1).max(100).regex(/^[A-Za-z0-9][A-Za-z0-9._-]*$/,'Invalid reference.'),quantity:z.number().int().min(1).max(1000000).nullable()})).max(50).default([])
 }).superRefine((v,ctx)=>{if(!v.products && !v.items.length) ctx.addIssue({code:'custom',path:['products'],message:'Enter product names or reference numbers, or add an instrument to your quote list.'});});
 export function validateRfq(body) {
  let items=[];

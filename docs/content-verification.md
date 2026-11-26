@@ -1,5 +1,11 @@
 # Content and launch verification
 
+## Continuation review — 25 November 2026
+
+Public contact and location information now comes from `src/business-info.js`, including Organization data, About/RFQ/privacy contacts and server error fallback messages. The profile retains the previously sourced trading name/address/phone/mailbox; it does not establish a registered legal entity. Supply the exact legal name, registration evidence and approved contact/address before describing those details as verified. Do not infer the public email from SMTP sender credentials.
+
+Read-only database review found 257 published products. The extraction package has review sidecars and flagged source conflicts, and the continuation has now added an explicit evidence-verification gate to CMS save/import/bulk publishing. Published status is not proof of source verification. Preserve current records; obtain owner review through the new source-evidence fields before further catalogue publication. No existing record was automatically approved. Full continuation tracking: [business improvements](business-improvements/IMPLEMENTATION_STATUS.md).
+
 ## Used with traceable sources
 - Business name, Sialkot location and supplied SVG logo: user's brief and original assets.
 - Contact email, telephone and Industrial Estate address: existing surgicalessence.com website, accessed 2 November 2026. Business should reconfirm these before launch.

@@ -1,0 +1,20 @@
+<%- include('head',{title:kind==='quotes'?'Quotations':'Leads'}) %>
+<p>Accepted quote requests form the sales pipeline. Leads and quotations show the same enquiries.</p>
+<nav class="actions" aria-label="Sales views"><a href="/admin/quotes">Quotations</a><a href="/admin/leads">Leads</a></nav>
+<section class="panel"><p><strong><%= counts.total %></strong> enquiries · <%= counts.thisWeek %> received in the past seven days</p><p><% statuses.forEach(status=>{ %><a href="/admin/<%= kind %>?status=<%= status %>"><%= status %> (<%= counts[status] %>)</a> <% }) %></p></section>
+<form class="filters" method="get" action="/admin/<%= kind %>">
+ <label>Search<input name="q" value="<%= filters.q %>" placeholder="Buyer, company or reference"></label>
+ <label>Status<select name="status"><option value="">All statuses</option><% statuses.forEach(status=>{ %><option value="<%= status %>" <%= filters.status===status?'selected':'' %>><%= status %></option><% }) %></select></label>
+ <label>Country<input name="country" value="<%= filters.country %>"></label>
+ <label>Received from (UTC)<input type="date" name="from" value="<%= filters.from %>"></label>
+ <label>Received through (UTC)<input type="date" name="to" value="<%= filters.to %>"></label>
+ <button>Filter</button><a href="/admin/<%= kind %>">Reset</a>
+</form>
+<% const query=new URLSearchParams({q:filters.q,status:filters.status,country:filters.country,from:filters.from,to:filters.to}); %>
+<div class="toolbar"><p><%= result.total %> matching enquiries</p><a class="button secondary" href="/admin/<%= kind %>/export?<%= query.toString() %>">Export filtered CSV</a></div>
+<section class="panel"><% if(!result.items.length){ %><p>No enquiries match these filters.</p><% }else{ %>
+<div class="table-wrap"><table><thead><tr><th>Reference</th><th>Buyer</th><th>Company</th><th>Country</th><th>Status</th><th>Received (UTC)</th></tr></thead><tbody>
+<% result.items.forEach(item=>{ %><tr><td><a href="/admin/<%= kind %>/<%= encodeURIComponent(item.id) %>"><%= item.id %></a></td><td><%= item.name %><br><%= item.email %></td><td><%= item.company %></td><td><%= item.country %></td><td><%= item.status %></td><td><%= new Date(item.createdAt).toISOString().slice(0,16).replace('T',' ') %></td></tr><% }) %>
+</tbody></table></div><% } %></section>
+<nav class="pagination" aria-label="Enquiry pages"><% if(result.page>1){query.set('page',String(result.page-1)); %><a href="/admin/<%= kind %>?<%= query.toString() %>">Previous</a><% } %><span>Page <%= result.page %> of <%= result.pages %></span><% if(result.page<result.pages){query.set('page',String(result.page+1)); %><a href="/admin/<%= kind %>?<%= query.toString() %>">Next</a><% } %></nav>
+<%- include('foot') %>

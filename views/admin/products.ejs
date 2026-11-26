@@ -1,0 +1,70 @@
+<%- include('head', {title:'Products'}) %>
+<script src="/bulk-publish.js" defer></script>
+<div class="toolbar">
+ <p><%= result.total %> products</p>
+ <div class="actions"><a class="button secondary" href="/admin/products/import">Import products</a><a class="button" href="/admin/products/new">Add product</a></div>
+</div>
+<form class="filters" method="get" action="/admin/products" id="product-filters">
+ <label>Search<input name="q" value="<%= filters.q %>" placeholder="Name or SKU"></label>
+ <label>Category<select name="category"><option value="">All categories</option><% categories.forEach(c=> { %><option value="<%= c.slug %>" <%= filters.category===c.slug?'selected':'' %>><%= c.name %></option><% }) %></select></label>
+ <label>Status<select name="status"><option value="">All statuses</option><% ['draft','published','archived'].forEach(s=> { %><option <%= filters.status===s?'selected':'' %>><%= s %></option><% }) %></select></label>
+ <button>Filter</button><a href="/admin/products">Reset</a>
+</form>
+<section class="panel bulk-toolbar" id="bulk-toolbar" aria-label="Bulk publishing" data-total="<%= result.total %>" hidden>
+ <div class="bulk-selection-actions">
+  <strong id="bulk-selected-count" role="status" aria-live="polite">0 selected</strong>
+  <button type="button" class="secondary" id="bulk-clear" disabled>Clear selection</button>
+  <button type="button" id="bulk-publish" disabled>Publish selected</button>
+ </div>
+ <button type="button" class="secondary" id="bulk-select-all" hidden>Select all <%= result.total %> products matching these filters</button>
+ <p class="muted">Only source-reviewed draft products in published categories can be published.</p>
+</section>
+<div id="bulk-error" class="notice error" role="alert" hidden></div>
+<section class="panel" id="bulk-active-jobs" aria-label="Unfinished publishing jobs" <%= publishJobs.length?'':'hidden' %>>
+ <h2>Unfinished publishing jobs</h2>
+ <ul><% publishJobs.forEach(job=> { const query=new URLSearchParams({q:filters.q,category:filters.category,status:filters.status,publishJob:job.id}); %>
+  <li><a href="/admin/products?<%= query.toString() %>">Resume publishing job (<%= job.total %> selected products, started <%= new Date(job.createdAt).toLocaleString('en-GB') %>)</a></li>
+ <% }) %></ul>
+</section>
+<noscript><p class="notice">Enable JavaScript to select and publish multiple products. Individual product editing is still available.</p></noscript>
+<section class="panel bulk-job" id="bulk-job" aria-labelledby="bulk-job-title" hidden>
+ <div class="bulk-selection-actions"><h2 id="bulk-job-title">Bulk publishing</h2><strong id="bulk-job-status" role="status"></strong></div>
+ <label for="bulk-progress">Publishing progress</label><progress id="bulk-progress" max="1" value="0"></progress>
+ <p id="bulk-job-summary" role="status" aria-live="polite"></p>
+ <div class="bulk-selection-actions">
+  <button type="button" id="bulk-resume" hidden>Resume publishing</button>
+  <button type="button" class="secondary" id="bulk-pause" hidden>Pause after this batch</button>
+  <a class="button secondary" id="bulk-refresh" href="/admin/products" hidden>Refresh products</a>
+ </div>
+ <label class="bulk-issues-filter"><input type="checkbox" id="bulk-issues-only"> Show skipped and failed products only</label>
+ <ul id="bulk-results" aria-label="Publishing results"></ul>
+ <nav class="bulk-selection-actions" aria-label="Publishing result pages">
+  <button type="button" class="secondary" id="bulk-results-prev" disabled>Previous results</button>
+  <span id="bulk-results-page"></span>
+  <button type="button" class="secondary" id="bulk-results-next" disabled>Next results</button>
+ </nav>
+</section>
+<div class="panel table-wrap"><table aria-label="Products"><thead><tr>
+ <th class="bulk-checkbox-cell"><label class="bulk-checkbox-label"><input type="checkbox" id="select-page" disabled><span class="sr-only">Select all products on this page</span></label></th>
+ <th scope="col">Image</th><th scope="col">Product</th><th scope="col">SKU</th><th scope="col">Category</th><th scope="col">Status</th><th scope="col">Updated</th><th scope="col">Actions</th>
+</tr></thead><tbody><% result.items.forEach(p=> { %><tr>
+ <td class="bulk-checkbox-cell"><label class="bulk-checkbox-label"><input type="checkbox" data-product-select data-product-id="<%= p.id %>" data-revision="<%= p.revision %>" disabled><span class="sr-only">Select <%= p.name %> (<%= p.code %>)</span></label></td>
+ <td><% if(p.image) { %><img class="thumb" src="<%= p.image %>" alt=""><% } else { %>—<% } %></td>
+ <td><a href="/admin/products/<%= p.id %>/edit"><%= p.name %></a><br><small>Source: <%= p.verification?.status==='verified'?'verified':'unreviewed' %></small></td><td><%= p.code %></td>
+ <td><%= categories.find(c=>c.id===p.categoryId || c.slug===p.category)?.name || p.category %></td>
+ <td><span class="badge"><%= p.status %></span></td><td><%= p.updatedAt ? new Date(p.updatedAt).toLocaleDateString('en-GB') : '—' %></td>
+ <td class="actions"><a href="/admin/products/<%= p.id %>/edit">Edit</a><% if(p.status!=='archived') { %><a class="danger" href="/admin/products/<%= p.id %>/archive">Archive</a><% } %></td>
+</tr><% }) %><% if(!result.items.length) { %><tr><td colspan="8">No matching products. Adjust the filters or add a product.</td></tr><% } %></tbody></table></div>
+<nav class="pagination" aria-label="Product pages">
+ <% if(result.page>1) { %><a href="?q=<%= encodeURIComponent(filters.q) %>&category=<%= encodeURIComponent(filters.category) %>&status=<%= filters.status %>&page=<%= result.page-1 %>">Previous</a><% } %>
+ <span>Page <%= result.page %> of <%= Math.max(1,result.pages) %></span>
+ <% if(result.page<result.pages) { %><a href="?q=<%= encodeURIComponent(filters.q) %>&category=<%= encodeURIComponent(filters.category) %>&status=<%= filters.status %>&page=<%= result.page+1 %>">Next</a><% } %>
+</nav>
+<dialog id="bulk-confirm-dialog" aria-labelledby="bulk-confirm-title" aria-describedby="bulk-confirm-summary">
+ <h2 id="bulk-confirm-title">Publish selected products?</h2>
+ <p id="bulk-confirm-summary"></p>
+ <p class="muted">Products changed after selection will not be overwritten. Categories and product details stay unchanged.</p>
+ <p id="bulk-confirm-error" class="notice error" role="alert" hidden></p>
+ <div class="bulk-selection-actions"><button type="button" class="secondary" id="bulk-cancel-confirm">Cancel</button><button type="button" id="bulk-confirm">Confirm bulk publish</button></div>
+</dialog>
+<%- include('foot') %>
